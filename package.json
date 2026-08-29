@@ -1,19 +1,26 @@
 {
   "name": "avisdevaleur",
+  "type": "module",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "contract:emit": "prisma-cli contract emit"
   },
   "dependencies": {
+    "@prisma/orm-postgres": "8.0.0-rc.6",
+    "better-auth": "^1.7.1",
+    "dotenv": "^17.4.2",
     "next": "16.3.2",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@prisma/cli": "8.0.0-rc.9",
+    "@prisma/cli-engine": "0.2.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
