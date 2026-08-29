@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Artefacts générés par Prisma Next — jamais écrits à la main.
+    "src/prisma/contract.d.ts",
+    "migrations/**",
   ]),
 ]);
 

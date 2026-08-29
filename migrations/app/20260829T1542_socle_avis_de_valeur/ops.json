@@ -1,0 +1,834 @@
+[
+  {
+    "id": "schema.avis_de_valeur",
+    "label": "Create schema \"avis_de_valeur\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"avis_de_valeur\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"avis_de_valeur\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.avis_de_valeur",
+    "label": "Create table \"avis_de_valeur\"",
+    "summary": "Creates table \"avis_de_valeur\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "table",
+        "name": "avis_de_valeur"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"avis_de_valeur\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"avis_de_valeur\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"avis_de_valeur\"",
+        "sql": "CREATE TABLE \"avis_de_valeur\".\"avis_de_valeur\" (\n  \"adresse\" text,\n  \"client_email\" text,\n  \"client_nom\" text,\n  \"client_telephone\" text,\n  \"code_postal\" text,\n  \"conseiller_idapimo\" int4 NOT NULL,\n  \"cree_le\" timestamptz DEFAULT (now()) NOT NULL,\n  \"dpe\" text,\n  \"id\" uuid NOT NULL,\n  \"modifie_le\" timestamptz DEFAULT (now()) NOT NULL,\n  \"prix_m2\" numeric,\n  \"referentiel_version_id\" uuid NOT NULL,\n  \"statut\" text DEFAULT 'brouillon' NOT NULL,\n  \"supprime_le\" timestamptz,\n  \"surface_habitable\" numeric,\n  \"surface_mediane_quartier\" numeric,\n  \"tendance_cran\" text DEFAULT 'equilibre' NOT NULL,\n  \"tendance_pourcentage\" numeric DEFAULT '0'::numeric NOT NULL,\n  \"type\" text NOT NULL,\n  \"valeur_intrinseque\" numeric,\n  \"valeur_retenue\" numeric,\n  \"ville\" text,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"avis_de_valeur_dpe_check_3df9dfe3\" CHECK (\"dpe\" IN ('A', 'B', 'C', 'D', 'E', 'F', 'G')),\n  CONSTRAINT \"avis_de_valeur_statut_check_45b9d9ac\" CHECK (\"statut\" IN ('brouillon', 'enregistre')),\n  CONSTRAINT \"avis_de_valeur_tendance_cran_check_67ec7273\" CHECK (\"tendance_cran\" IN ('haussier', 'equilibre', 'baissier')),\n  CONSTRAINT \"avis_de_valeur_type_check_a219d391\" CHECK (\"type\" IN ('maison', 'appartement'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"avis_de_valeur\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"avis_de_valeur\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.ligne_avis",
+    "label": "Create table \"ligne_avis\"",
+    "summary": "Creates table \"ligne_avis\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "table",
+        "name": "ligne_avis"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"ligne_avis\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"ligne_avis\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"ligne_avis\"",
+        "sql": "CREATE TABLE \"avis_de_valeur\".\"ligne_avis\" (\n  \"active\" bool DEFAULT false NOT NULL,\n  \"avis_id\" uuid NOT NULL,\n  \"categorie\" text NOT NULL,\n  \"cle\" text NOT NULL,\n  \"cout_m2\" numeric,\n  \"id\" uuid NOT NULL,\n  \"kind\" text NOT NULL,\n  \"montant\" numeric,\n  \"option\" text,\n  \"pourcentage\" numeric,\n  \"surface\" numeric,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"ligne_avis_categorie_check_62d436cf\" CHECK (\"categorie\" IN ('majoration', 'minoration')),\n  CONSTRAINT \"ligne_avis_kind_check_a117c92d\" CHECK (\"kind\" IN ('surface', 'pourcentage', 'coutM2', 'montant', 'options', 'interrupteur'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"ligne_avis\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"ligne_avis\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.referentiel_version",
+    "label": "Create table \"referentiel_version\"",
+    "summary": "Creates table \"referentiel_version\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "table",
+        "name": "referentiel_version"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"referentiel_version\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"referentiel_version\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"referentiel_version\"",
+        "sql": "CREATE TABLE \"avis_de_valeur\".\"referentiel_version\" (\n  \"actif\" bool DEFAULT false NOT NULL,\n  \"contenu\" jsonb NOT NULL,\n  \"cree_le\" timestamptz DEFAULT (now()) NOT NULL,\n  \"cree_par_idapimo\" int4,\n  \"id\" uuid NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"referentiel_version\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"referentiel_version\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.session",
+    "label": "Create table \"session\"",
+    "summary": "Creates table \"session\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "table",
+        "name": "session"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"session\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"session\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"session\"",
+        "sql": "CREATE TABLE \"avis_de_valeur\".\"session\" (\n  \"conseiller_idapimo\" int4 NOT NULL,\n  \"cree_le\" timestamptz DEFAULT (now()) NOT NULL,\n  \"expire_le\" timestamptz NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"ip\" text,\n  \"token_hash\" text NOT NULL,\n  \"user_agent\" text,\n  \"vu_le\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"session\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"session\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.tentative_connexion",
+    "label": "Create table \"tentative_connexion\"",
+    "summary": "Creates table \"tentative_connexion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "table",
+        "name": "tentative_connexion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"tentative_connexion\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"tentative_connexion\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"tentative_connexion\"",
+        "sql": "CREATE TABLE \"avis_de_valeur\".\"tentative_connexion\" (\n  \"cree_le\" timestamptz DEFAULT (now()) NOT NULL,\n  \"email\" text NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"ip\" text,\n  \"reussie\" bool NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"tentative_connexion\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"tentative_connexion\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.ligne_avis.ligne_avis_avis_id_cle_key",
+    "label": "Add unique constraint on \"ligne_avis\" (avis_id, cle)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "unique",
+        "name": "ligne_avis_avis_id_cle_key",
+        "table": "ligne_avis"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"ligne_avis_avis_id_cle_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ligne_avis_avis_id_cle_key",
+          "avis_de_valeur",
+          "\"avis_de_valeur\".\"ligne_avis\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"ligne_avis_avis_id_cle_key\"",
+        "sql": "ALTER TABLE \"avis_de_valeur\".\"ligne_avis\" ADD CONSTRAINT \"ligne_avis_avis_id_cle_key\" UNIQUE (\"avis_id\", \"cle\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"ligne_avis_avis_id_cle_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ligne_avis_avis_id_cle_key",
+          "avis_de_valeur",
+          "\"avis_de_valeur\".\"ligne_avis\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.session.session_token_hash_key",
+    "label": "Add unique constraint on \"session\" (token_hash)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "unique",
+        "name": "session_token_hash_key",
+        "table": "session"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"session_token_hash_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "session_token_hash_key",
+          "avis_de_valeur",
+          "\"avis_de_valeur\".\"session\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"session_token_hash_key\"",
+        "sql": "ALTER TABLE \"avis_de_valeur\".\"session\" ADD CONSTRAINT \"session_token_hash_key\" UNIQUE (\"token_hash\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"session_token_hash_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "session_token_hash_key",
+          "avis_de_valeur",
+          "\"avis_de_valeur\".\"session\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.avis_de_valeur.avis_de_valeur_conseiller_idapimo_idx_f7c90b50",
+    "label": "Create index \"avis_de_valeur_conseiller_idapimo_idx_f7c90b50\" on \"avis_de_valeur\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "index",
+        "name": "avis_de_valeur_conseiller_idapimo_idx_f7c90b50",
+        "table": "avis_de_valeur"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"avis_de_valeur_conseiller_idapimo_idx_f7c90b50\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"avis_de_valeur_conseiller_idapimo_idx_f7c90b50\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"avis_de_valeur_conseiller_idapimo_idx_f7c90b50\"",
+        "sql": "CREATE INDEX \"avis_de_valeur_conseiller_idapimo_idx_f7c90b50\" ON \"avis_de_valeur\".\"avis_de_valeur\" (\"conseiller_idapimo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"avis_de_valeur_conseiller_idapimo_idx_f7c90b50\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"avis_de_valeur_conseiller_idapimo_idx_f7c90b50\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.avis_de_valeur.avis_de_valeur_conseiller_idapimo_modifie_le_idx_2531ff6b",
+    "label": "Create index \"avis_de_valeur_conseiller_idapimo_modifie_le_idx_2531ff6b\" on \"avis_de_valeur\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "index",
+        "name": "avis_de_valeur_conseiller_idapimo_modifie_le_idx_2531ff6b",
+        "table": "avis_de_valeur"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"avis_de_valeur_conseiller_idapimo_modifie_le_idx_2531ff6b\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"avis_de_valeur_conseiller_idapimo_modifie_le_idx_2531ff6b\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"avis_de_valeur_conseiller_idapimo_modifie_le_idx_2531ff6b\"",
+        "sql": "CREATE INDEX \"avis_de_valeur_conseiller_idapimo_modifie_le_idx_2531ff6b\" ON \"avis_de_valeur\".\"avis_de_valeur\" (\"conseiller_idapimo\", \"modifie_le\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"avis_de_valeur_conseiller_idapimo_modifie_le_idx_2531ff6b\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"avis_de_valeur_conseiller_idapimo_modifie_le_idx_2531ff6b\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.avis_de_valeur.avis_de_valeur_referentiel_version_id_idx_ba6ba763",
+    "label": "Create index \"avis_de_valeur_referentiel_version_id_idx_ba6ba763\" on \"avis_de_valeur\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "index",
+        "name": "avis_de_valeur_referentiel_version_id_idx_ba6ba763",
+        "table": "avis_de_valeur"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"avis_de_valeur_referentiel_version_id_idx_ba6ba763\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"avis_de_valeur_referentiel_version_id_idx_ba6ba763\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"avis_de_valeur_referentiel_version_id_idx_ba6ba763\"",
+        "sql": "CREATE INDEX \"avis_de_valeur_referentiel_version_id_idx_ba6ba763\" ON \"avis_de_valeur\".\"avis_de_valeur\" (\"referentiel_version_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"avis_de_valeur_referentiel_version_id_idx_ba6ba763\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"avis_de_valeur_referentiel_version_id_idx_ba6ba763\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.ligne_avis.ligne_avis_avis_id_idx_1be523a4",
+    "label": "Create index \"ligne_avis_avis_id_idx_1be523a4\" on \"ligne_avis\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "index",
+        "name": "ligne_avis_avis_id_idx_1be523a4",
+        "table": "ligne_avis"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"ligne_avis_avis_id_idx_1be523a4\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"ligne_avis_avis_id_idx_1be523a4\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"ligne_avis_avis_id_idx_1be523a4\"",
+        "sql": "CREATE INDEX \"ligne_avis_avis_id_idx_1be523a4\" ON \"avis_de_valeur\".\"ligne_avis\" (\"avis_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"ligne_avis_avis_id_idx_1be523a4\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"ligne_avis_avis_id_idx_1be523a4\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.referentiel_version.referentiel_version_actif_idx_a7f19943",
+    "label": "Create index \"referentiel_version_actif_idx_a7f19943\" on \"referentiel_version\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "index",
+        "name": "referentiel_version_actif_idx_a7f19943",
+        "table": "referentiel_version"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"referentiel_version_actif_idx_a7f19943\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"referentiel_version_actif_idx_a7f19943\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"referentiel_version_actif_idx_a7f19943\"",
+        "sql": "CREATE INDEX \"referentiel_version_actif_idx_a7f19943\" ON \"avis_de_valeur\".\"referentiel_version\" (\"actif\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"referentiel_version_actif_idx_a7f19943\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"referentiel_version_actif_idx_a7f19943\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.session.session_conseiller_idapimo_idx_f7c90b50",
+    "label": "Create index \"session_conseiller_idapimo_idx_f7c90b50\" on \"session\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "index",
+        "name": "session_conseiller_idapimo_idx_f7c90b50",
+        "table": "session"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"session_conseiller_idapimo_idx_f7c90b50\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"session_conseiller_idapimo_idx_f7c90b50\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"session_conseiller_idapimo_idx_f7c90b50\"",
+        "sql": "CREATE INDEX \"session_conseiller_idapimo_idx_f7c90b50\" ON \"avis_de_valeur\".\"session\" (\"conseiller_idapimo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"session_conseiller_idapimo_idx_f7c90b50\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"session_conseiller_idapimo_idx_f7c90b50\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.session.session_expire_le_idx_f9e8e926",
+    "label": "Create index \"session_expire_le_idx_f9e8e926\" on \"session\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "index",
+        "name": "session_expire_le_idx_f9e8e926",
+        "table": "session"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"session_expire_le_idx_f9e8e926\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"session_expire_le_idx_f9e8e926\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"session_expire_le_idx_f9e8e926\"",
+        "sql": "CREATE INDEX \"session_expire_le_idx_f9e8e926\" ON \"avis_de_valeur\".\"session\" (\"expire_le\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"session_expire_le_idx_f9e8e926\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"session_expire_le_idx_f9e8e926\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.tentative_connexion.tentative_connexion_email_cree_le_idx_4d6429d3",
+    "label": "Create index \"tentative_connexion_email_cree_le_idx_4d6429d3\" on \"tentative_connexion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "index",
+        "name": "tentative_connexion_email_cree_le_idx_4d6429d3",
+        "table": "tentative_connexion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"tentative_connexion_email_cree_le_idx_4d6429d3\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"tentative_connexion_email_cree_le_idx_4d6429d3\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"tentative_connexion_email_cree_le_idx_4d6429d3\"",
+        "sql": "CREATE INDEX \"tentative_connexion_email_cree_le_idx_4d6429d3\" ON \"avis_de_valeur\".\"tentative_connexion\" (\"email\", \"cree_le\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"tentative_connexion_email_cree_le_idx_4d6429d3\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"tentative_connexion_email_cree_le_idx_4d6429d3\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.tentative_connexion.tentative_connexion_ip_cree_le_idx_e9728ccb",
+    "label": "Create index \"tentative_connexion_ip_cree_le_idx_e9728ccb\" on \"tentative_connexion\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "index",
+        "name": "tentative_connexion_ip_cree_le_idx_e9728ccb",
+        "table": "tentative_connexion"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"tentative_connexion_ip_cree_le_idx_e9728ccb\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"tentative_connexion_ip_cree_le_idx_e9728ccb\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"tentative_connexion_ip_cree_le_idx_e9728ccb\"",
+        "sql": "CREATE INDEX \"tentative_connexion_ip_cree_le_idx_e9728ccb\" ON \"avis_de_valeur\".\"tentative_connexion\" (\"ip\", \"cree_le\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"tentative_connexion_ip_cree_le_idx_e9728ccb\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"avis_de_valeur\".\"tentative_connexion_ip_cree_le_idx_e9728ccb\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.avis_de_valeur.avis_de_valeur_conseiller_idapimo_fkey",
+    "label": "Add foreign key \"avis_de_valeur_conseiller_idapimo_fkey\" on \"avis_de_valeur\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "foreignKey",
+        "name": "avis_de_valeur_conseiller_idapimo_fkey",
+        "table": "avis_de_valeur"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"avis_de_valeur_conseiller_idapimo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "avis_de_valeur_conseiller_idapimo_fkey",
+          "avis_de_valeur",
+          "\"avis_de_valeur\".\"avis_de_valeur\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"avis_de_valeur_conseiller_idapimo_fkey\"",
+        "sql": "ALTER TABLE \"avis_de_valeur\".\"avis_de_valeur\"\nADD CONSTRAINT \"avis_de_valeur_conseiller_idapimo_fkey\"\nFOREIGN KEY (\"conseiller_idapimo\")\nREFERENCES \"public\".\"utilisateurs\" (\"idapimo\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"avis_de_valeur_conseiller_idapimo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "avis_de_valeur_conseiller_idapimo_fkey",
+          "avis_de_valeur",
+          "\"avis_de_valeur\".\"avis_de_valeur\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.avis_de_valeur.avis_de_valeur_referentiel_version_id_fkey",
+    "label": "Add foreign key \"avis_de_valeur_referentiel_version_id_fkey\" on \"avis_de_valeur\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "foreignKey",
+        "name": "avis_de_valeur_referentiel_version_id_fkey",
+        "table": "avis_de_valeur"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"avis_de_valeur_referentiel_version_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "avis_de_valeur_referentiel_version_id_fkey",
+          "avis_de_valeur",
+          "\"avis_de_valeur\".\"avis_de_valeur\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"avis_de_valeur_referentiel_version_id_fkey\"",
+        "sql": "ALTER TABLE \"avis_de_valeur\".\"avis_de_valeur\"\nADD CONSTRAINT \"avis_de_valeur_referentiel_version_id_fkey\"\nFOREIGN KEY (\"referentiel_version_id\")\nREFERENCES \"avis_de_valeur\".\"referentiel_version\" (\"id\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"avis_de_valeur_referentiel_version_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "avis_de_valeur_referentiel_version_id_fkey",
+          "avis_de_valeur",
+          "\"avis_de_valeur\".\"avis_de_valeur\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.ligne_avis.ligne_avis_avis_id_fkey",
+    "label": "Add foreign key \"ligne_avis_avis_id_fkey\" on \"ligne_avis\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "foreignKey",
+        "name": "ligne_avis_avis_id_fkey",
+        "table": "ligne_avis"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"ligne_avis_avis_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ligne_avis_avis_id_fkey",
+          "avis_de_valeur",
+          "\"avis_de_valeur\".\"ligne_avis\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"ligne_avis_avis_id_fkey\"",
+        "sql": "ALTER TABLE \"avis_de_valeur\".\"ligne_avis\"\nADD CONSTRAINT \"ligne_avis_avis_id_fkey\"\nFOREIGN KEY (\"avis_id\")\nREFERENCES \"avis_de_valeur\".\"avis_de_valeur\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"ligne_avis_avis_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ligne_avis_avis_id_fkey",
+          "avis_de_valeur",
+          "\"avis_de_valeur\".\"ligne_avis\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.session.session_conseiller_idapimo_fkey",
+    "label": "Add foreign key \"session_conseiller_idapimo_fkey\" on \"session\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "foreignKey",
+        "name": "session_conseiller_idapimo_fkey",
+        "table": "session"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"session_conseiller_idapimo_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "session_conseiller_idapimo_fkey",
+          "avis_de_valeur",
+          "\"avis_de_valeur\".\"session\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"session_conseiller_idapimo_fkey\"",
+        "sql": "ALTER TABLE \"avis_de_valeur\".\"session\"\nADD CONSTRAINT \"session_conseiller_idapimo_fkey\"\nFOREIGN KEY (\"conseiller_idapimo\")\nREFERENCES \"public\".\"utilisateurs\" (\"idapimo\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"session_conseiller_idapimo_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "session_conseiller_idapimo_fkey",
+          "avis_de_valeur",
+          "\"avis_de_valeur\".\"session\""
+        ]
+      }
+    ]
+  }
+]

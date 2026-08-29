@@ -1,21 +1,197 @@
 // use prisma-next
+//
+// Base `facturation`, deux schémas :
+//   - `public`          : propriété de l'outil de facturation. LECTURE SEULE.
+//                         Seule `utilisateurs` est modélisée, en @@control(external) :
+//                         Prisma n'émet jamais de DDL pour elle. Les autres tables
+//                         (contrats, factures, contacts, property…) restent hors contrat.
+//   - `avis_de_valeur`  : propriété exclusive de cette application.
+//
+// L'identité du conseiller est `utilisateurs.idapimo` (NOT NULL, UNIQUE, venue d'Apimo),
+// et non la clé primaire locale `id` : elle survit à une reconstruction de la base.
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  username  String?
-  name      String?
-  posts     Post[]
-  createdAt DateTime @default(now())
-  updatedAt temporal.updatedAt()
+enum type_bien {
+  @@type("pg/text@1")
+  maison      = "maison"
+  appartement = "appartement"
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-  createdAt DateTime @default(now())
-  updatedAt temporal.updatedAt()
+enum statut_avis {
+  @@type("pg/text@1")
+  brouillon  = "brouillon"
+  enregistre = "enregistre"
+}
+
+enum lettre_dpe {
+  @@type("pg/text@1")
+  A = "A"
+  B = "B"
+  C = "C"
+  D = "D"
+  E = "E"
+  F = "F"
+  G = "G"
+}
+
+enum cran_tendance {
+  @@type("pg/text@1")
+  haussier  = "haussier"
+  equilibre = "equilibre"
+  baissier  = "baissier"
+}
+
+enum categorie_ligne {
+  @@type("pg/text@1")
+  majoration = "majoration"
+  minoration = "minoration"
+}
+
+enum kind_ligne {
+  @@type("pg/text@1")
+  surface      = "surface"
+  pourcentage  = "pourcentage"
+  coutM2       = "coutM2"
+  montant      = "montant"
+  options      = "options"
+  interrupteur = "interrupteur"
+}
+
+namespace public {
+  /// Table de l'outil de facturation. Jamais migrée, jamais écrite par cette
+  /// application : @@control(external) interdit à Prisma d'émettre le moindre DDL.
+  /// Les types natifs sont ceux de la table réelle (obtenus par `contract infer`) —
+  /// la vérification de schéma les compare à l'octet près.
+  model Utilisateur {
+    id         Int          @id(map: "utilisateurs_pkey") @default(autoincrement())
+    idapimo    Int
+    prenom     VarChar(50)?
+    nom        VarChar(50)?
+    email      VarChar(255)?
+    telephone  VarChar(60)?
+    mobile     VarChar(60)?
+    role       VarChar(50)?
+    actif      Boolean      @default(true)
+    motDePasse Char(60)?
+    siren      VarChar(255)?
+
+    // Index unique, et non contrainte unique : c'est ainsi qu'il existe en base.
+    @@index([idapimo], map: "idapimo_unique", unique: true)
+    @@map("utilisateurs")
+    @@control(external)
+  }
+}
+
+namespace avis_de_valeur {
+  /// Session applicative. Seule l'empreinte SHA-256 du jeton est stockée.
+  model Session {
+    id               Uuid   @id @default(uuid())
+    tokenHash        String   @unique @map("token_hash")
+    conseillerIdapimo Int     @map("conseiller_idapimo")
+    conseiller       Utilisateur @relation(fields: [conseillerIdapimo], references: [idapimo], onDelete: Cascade)
+    creeLe           TimestamptzString @default(now()) @map("cree_le")
+    expireLe         TimestamptzString @map("expire_le")
+    vuLe             TimestamptzString @default(now()) @map("vu_le")
+    userAgent        String?  @map("user_agent")
+    ip               String?
+
+    @@index([conseillerIdapimo])
+    @@index([expireLe])
+    @@map("session")
+  }
+
+  /// Tentatives de connexion, pour limiter le bourrage d'identifiants.
+  model TentativeConnexion {
+    id      Uuid   @id @default(uuid())
+    email   String
+    ip      String?
+    reussie Boolean
+    creeLe  TimestamptzString @default(now()) @map("cree_le")
+
+    @@index([email, creeLe])
+    @@index([ip, creeLe])
+    @@map("tentative_connexion")
+  }
+
+  /// Référentiel administrable (écran 9), versionné : un avis reste reproductible
+  /// des années plus tard. `contenu` est en JSONB car l'écran prévoit explicitement
+  /// « + Ajouter un groupe de paramètres » — la forme doit grandir sans migration.
+  model ReferentielVersion {
+    id             Uuid   @id @default(uuid())
+    contenu        Jsonb
+    actif          Boolean  @default(false)
+    creeLe         TimestamptzString @default(now()) @map("cree_le")
+    creeParIdapimo Int?     @map("cree_par_idapimo")
+
+    avis AvisDeValeur[]
+
+    @@index([actif])
+    @@map("referentiel_version")
+  }
+
+  model AvisDeValeur {
+    id                Uuid      @id @default(uuid())
+    conseillerIdapimo Int         @map("conseiller_idapimo")
+    // Restrict : un avis de valeur est un document remis à un client,
+    // il ne doit jamais perdre son auteur.
+    conseiller        Utilisateur @relation(fields: [conseillerIdapimo], references: [idapimo], onDelete: Restrict)
+
+    type   type_bien
+    statut statut_avis @default(brouillon)
+
+    clientNom       String? @map("client_nom")
+    clientTelephone String? @map("client_telephone")
+    clientEmail     String? @map("client_email")
+
+    adresse    String?
+    codePostal String? @map("code_postal")
+    ville      String?
+
+    surfaceHabitable       Decimal? @map("surface_habitable")
+    prixM2                 Decimal? @map("prix_m2")
+    surfaceMedianeQuartier Decimal? @map("surface_mediane_quartier")
+    dpe                    lettre_dpe?
+
+    tendanceCran        cran_tendance @default(equilibre) @map("tendance_cran")
+    tendancePourcentage Decimal       @default("0") @map("tendance_pourcentage")
+
+    // Figées à l'enregistrement (statut = enregistre), nulles tant que brouillon.
+    valeurIntrinseque Decimal? @map("valeur_intrinseque")
+    valeurRetenue     Decimal? @map("valeur_retenue")
+
+    referentielVersionId Uuid               @map("referentiel_version_id")
+    referentielVersion   ReferentielVersion @relation(fields: [referentielVersionId], references: [id], onDelete: Restrict)
+
+    lignes LigneAvis[]
+
+    creeLe     TimestamptzString  @default(now()) @map("cree_le")
+    modifieLe  TimestamptzString  @default(now()) @map("modifie_le")
+    supprimeLe TimestamptzString? @map("supprime_le")
+
+    @@index([conseillerIdapimo, modifieLe])
+    @@index([referentielVersionId])
+    @@map("avis_de_valeur")
+  }
+
+  /// Une ligne par critère de majoration / minoration. Une ligne désactivée
+  /// contribue 0 mais conserve ses valeurs saisies : d'où des colonnes plutôt
+  /// qu'un blob JSON.
+  model LigneAvis {
+    id     Uuid       @id @default(uuid())
+    avisId Uuid         @map("avis_id")
+    avis   AvisDeValeur @relation(fields: [avisId], references: [id], onDelete: Cascade)
+
+    categorie categorie_ligne
+    cle       String
+    active    Boolean         @default(false)
+    kind      kind_ligne
+
+    surface     Decimal?
+    pourcentage Decimal?
+    coutM2      Decimal? @map("cout_m2")
+    montant     Decimal?
+    option      String?
+
+    @@unique([avisId, cle])
+    @@map("ligne_avis")
+  }
 }

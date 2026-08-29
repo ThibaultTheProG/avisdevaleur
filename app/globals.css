@@ -1,26 +1,175 @@
 @import "tailwindcss";
 
+/* Jetons de design — repris de design_handoff_avis_de_valeur/tokens.css.
+   Les polices viennent de next/font (voir app/layout.tsx) : --font-texte (Nunito)
+   et --font-display (Quicksand, en attendant les fichiers All Round Gothic).
+   Pas de thème sombre : la maquette est définitive et engagée sur un seul rendu. */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* marque */
+  --youlive-orange: #f28c1e;
+  --youlive-orange-pressed: #d2760f;
+  --youlive-orange-ink: #b36a0c;
+  --youlive-orange-soft: #ffe6d2;
+  --youlive-orange-faint: #fff7ef;
+
+  /* neutres chauds */
+  --surface: #ffffff;
+  --app-bg: #faf9f7;
+  --neutral-100: #efebe4;
+  --neutral-200: #e5e2dc;
+  --neutral-300: #ded9d1;
+  --neutral-400: #d9d4cc;
+  --neutral-500: #b8b2aa;
+  --neutral-600: #9a948d;
+  --neutral-700: #6b6560;
+  --ink: #000000;
+
+  /* sens des montants — jamais en aplat large, jamais en couleur de bouton */
+  --plus: #4c7a5a;
+  --plus-bg: #edf3ee;
+  --minus: #c4573f;
+  --minus-bg: #faede9;
+
+  /* pastilles DPE (codes officiels français) */
+  --dpe-a: #319c6b;
+  --dpe-b: #5fb14e;
+  --dpe-c: #b7d04a;
+  --dpe-d: #f5de4b;
+  --dpe-d-ink: #5b5220;
+  --dpe-e: #f0b22e;
+  --dpe-f: #e2762c;
+  --dpe-g: #c93b25;
+
+  /* rayons */
+  --radius-field: 14px;
+  --radius-button: 16px;
+  --radius-card: 20px;
+  --radius-panel: 22px;
+  --radius-pill: 999px;
+
+  /* ombres */
+  --shadow-card: 0 2px 10px rgb(0 0 0 / 0.05);
+  --shadow-row: 0 2px 8px rgb(0 0 0 / 0.04);
+  --shadow-primary: 0 4px 12px rgb(242 140 30 / 0.28);
+  --shadow-primary-full: 0 5px 14px rgb(242 140 30 / 0.3);
+  --shadow-calc: 0 4px 16px rgb(242 140 30 / 0.1);
+  --shadow-sticky: 0 -6px 18px rgb(0 0 0 / 0.05);
+  --shadow-sheet: 0 -12px 30px rgb(0 0 0 / 0.14);
+  --ring-focus: 0 0 0 4px rgb(242 140 30 / 0.13);
+
+  /* mouvement */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duration: 180ms;
+
+  /* --- correspondance shadcn/ui ---
+     Reprend le mapping fourni par le handoff (tokens.css § mapping shadcn/ui),
+     en valeurs directes : Tailwind 4 les consomme via @theme inline ci-dessous.
+     Aucun thème sombre : la maquette est engagée sur un seul rendu. */
+  --background: var(--app-bg);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--youlive-orange);
+  --primary-foreground: #ffffff;
+  --secondary: var(--youlive-orange-soft);
+  --secondary-foreground: var(--youlive-orange-ink);
+  --muted: var(--neutral-100);
+  --muted-foreground: var(--neutral-600);
+  --accent: var(--youlive-orange-soft);
+  --accent-foreground: var(--youlive-orange-ink);
+  --destructive: var(--minus);
+  --destructive-foreground: #ffffff;
+  --border: var(--neutral-200);
+  --input: var(--neutral-200);
+  --ring: var(--youlive-orange);
+  --radius: 0.875rem; /* 14px */
 }
 
 @theme inline {
+  --color-orange: var(--youlive-orange);
+  --color-orange-pressed: var(--youlive-orange-pressed);
+  --color-orange-ink: var(--youlive-orange-ink);
+  --color-orange-soft: var(--youlive-orange-soft);
+  --color-orange-faint: var(--youlive-orange-faint);
+
+  --color-surface: var(--surface);
+  --color-app: var(--app-bg);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-ink: var(--ink);
+
+  --color-plus: var(--plus);
+  --color-plus-bg: var(--plus-bg);
+  --color-minus: var(--minus);
+  --color-minus-bg: var(--minus-bg);
+
+  --font-sans: var(--font-texte), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), Quicksand, ui-sans-serif, sans-serif;
+
+  --radius-field: var(--radius-field);
+  --radius-button: var(--radius-button);
+  --radius-card: var(--radius-card);
+  --radius-panel: var(--radius-panel);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-row: var(--shadow-row);
+  --shadow-primary: var(--shadow-primary);
+  --shadow-calc: var(--shadow-calc);
+
+  --ease-youlive: var(--ease);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--app-bg);
+  color: var(--ink);
+  font-family: var(--font-texte), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display), Quicksand, ui-sans-serif, sans-serif;
+  font-weight: 700;
+}
+
+/* Zones tactiles >= 44 px : le conseiller saisit debout, chez un client. */
+button,
+[role="button"],
+input,
+select {
+  touch-action: manipulation;
 }
