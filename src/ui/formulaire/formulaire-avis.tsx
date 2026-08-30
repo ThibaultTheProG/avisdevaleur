@@ -165,7 +165,7 @@ export function FormulaireAvis({ avis, referentiel, etape, sauvegarder, finalise
           <RailEtapes etape={etape} terminees={terminees} compteurs={compteurs} onAller={allerA} />
 
           <main className="flex min-w-0 flex-1 flex-col gap-[14px]">
-            <div className="hidden lg:block">
+            <div className="hidden xl:block">
               <p className="text-[11.5px] font-bold tracking-[1.2px] text-[var(--neutral-600)] uppercase">
                 Étape {etape} sur {ETAPES.length}
               </p>
@@ -322,26 +322,33 @@ export function FormulaireAvis({ avis, referentiel, etape, sauvegarder, finalise
             )}
 
             {/* Pied de contenu — desktop */}
-            <div className="mt-[10px] hidden items-center justify-between gap-[12px] lg:flex">
+            <div className="mt-[10px] hidden flex-wrap items-center justify-between gap-[12px] lg:flex">
               <Button
                 type="button"
                 variant="secondary"
                 onClick={() => allerA(etape - 1)}
                 disabled={etape === 1 || enCours}
+                className="px-[18px]"
               >
                 Précédent
               </Button>
-              <div className="flex items-center gap-[10px]">
+              <div className="flex flex-1 flex-wrap items-center justify-end gap-[10px]">
                 <Button
                   type="button"
                   variant="secondary"
                   onClick={() => allerA(etape)}
                   disabled={enCours}
+                  className="px-[18px]"
                 >
                   Enregistrer le brouillon
                 </Button>
                 {etape < ETAPES.length && (
-                  <Button type="button" onClick={() => allerA(etape + 1)} disabled={enCours}>
+                  <Button
+                    type="button"
+                    onClick={() => allerA(etape + 1)}
+                    disabled={enCours}
+                    className="px-[18px]"
+                  >
                     Suivant · {ETAPES[etape]}
                   </Button>
                 )}
