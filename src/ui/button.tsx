@@ -9,8 +9,8 @@ import { cn } from '@/src/lib/utils';
  * Hauteur tactile minimale 48 px sur mobile : le conseiller saisit debout.
  */
 const boutonVariants = cva(
-  'inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap font-display font-bold ' +
-    'transition-all outline-none disabled:pointer-events-none ' +
+  'inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap ' +
+    'font-display font-bold transition-all outline-none disabled:pointer-events-none ' +
     'focus-visible:shadow-[var(--ring-focus)] ' +
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-[18px]",
   {

@@ -109,7 +109,7 @@ export function FormulaireParametres({ referentiel, derniereModification, enregi
               aria-current={onglet === id ? 'true' : undefined}
               onClick={() => setOnglet(id)}
               className={cn(
-                'rounded-t-[14px] px-[18px] py-[11px] font-display text-[14px] font-bold transition',
+                'cursor-pointer rounded-t-[14px] px-[18px] py-[11px] font-display text-[14px] font-bold transition',
                 onglet === id
                   ? 'border border-b-0 border-[var(--neutral-100)] bg-white text-[var(--youlive-orange-ink)]'
                   : 'text-[var(--neutral-600)] hover:text-black',

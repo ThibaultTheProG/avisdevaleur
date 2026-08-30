@@ -286,7 +286,7 @@ export function FormulaireAvis({ avis, referentiel, etape, sauvegarder, finalise
                           majDraft({ tendanceCran: valeur, tendancePourcentage: taux })
                         }
                         className={cn(
-                          'flex items-center justify-between gap-[12px] rounded-[18px] border-2 bg-white p-[16px] text-left transition',
+                          'flex cursor-pointer items-center justify-between gap-[12px] rounded-[18px] border-2 bg-white p-[16px] text-left transition',
                           choisi
                             ? 'border-[var(--youlive-orange)] bg-[var(--youlive-orange-faint)]'
                             : 'border-[var(--neutral-100)]',

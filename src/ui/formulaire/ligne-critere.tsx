@@ -216,7 +216,7 @@ function PastillesOptions({
             aria-pressed={choisi}
             onClick={() => onValeur(option.valeur)}
             className={cn(
-              'min-h-[44px] rounded-full border-2 px-[16px] text-[13.5px] font-bold transition',
+              'min-h-[44px] cursor-pointer rounded-full border-2 px-[16px] text-[13.5px] font-bold transition',
               choisi
                 ? 'border-[var(--youlive-orange)] bg-[var(--youlive-orange-soft)] text-[var(--youlive-orange-ink)]'
                 : 'border-[var(--neutral-200)] bg-white text-[var(--neutral-700)]',

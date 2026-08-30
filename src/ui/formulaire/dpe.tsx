@@ -52,7 +52,7 @@ export function SelecteurDpe({
                 color: lettre === 'D' ? 'var(--dpe-d-ink)' : '#fff',
               }}
               className={cn(
-                'h-[50px] flex-1 rounded-[14px] font-display text-[18px] font-bold transition lg:h-[52px] lg:w-[52px] lg:flex-none',
+                'h-[50px] flex-1 cursor-pointer rounded-[14px] font-display text-[18px] font-bold transition lg:h-[52px] lg:w-[52px] lg:flex-none',
                 choisi && 'outline-[3px] outline-offset-2 outline-black',
               )}
             >

@@ -66,7 +66,7 @@ function LienDeconnexion({ className }: { className?: string }) {
     <form action="/api/deconnexion" method="post" className={className}>
       <button
         type="submit"
-        className="flex min-h-[44px] w-full items-center gap-[10px] rounded-[14px] px-[12px] text-[14.5px] font-bold text-[var(--minus)] transition hover:bg-[var(--minus-bg)]"
+        className="flex min-h-[44px] w-full cursor-pointer items-center gap-[10px] rounded-[14px] px-[12px] text-[14.5px] font-bold text-[var(--minus)] transition hover:bg-[var(--minus-bg)]"
       >
         <LogOut className="size-[18px]" />
         Déconnexion
@@ -128,7 +128,7 @@ export function EnteteMobile({ conseiller }: { conseiller: ConseillerNav }) {
           onClick={() => setOuvert((v) => !v)}
           aria-expanded={ouvert}
           aria-label={ouvert ? 'Fermer le menu' : 'Ouvrir le menu'}
-          className="grid size-[44px] place-items-center rounded-[12px] text-black transition hover:bg-[var(--neutral-100)]"
+          className="grid size-[44px] cursor-pointer place-items-center rounded-[12px] text-black transition hover:bg-[var(--neutral-100)]"
         >
           {ouvert ? <X className="size-[22px]" /> : <Menu className="size-[22px]" />}
         </button>

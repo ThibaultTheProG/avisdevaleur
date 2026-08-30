@@ -51,7 +51,7 @@ export function ChoixTypeBien({
               onClick={() => setType(valeur)}
               aria-pressed={choisi}
               className={cn(
-                'flex-1 rounded-[22px] border-2 bg-white p-[26px] text-left transition',
+                'flex-1 cursor-pointer rounded-[22px] border-2 bg-white p-[26px] text-left transition',
                 choisi
                   ? 'border-[var(--youlive-orange)] shadow-[var(--shadow-calc)]'
                   : 'border-[var(--neutral-100)] shadow-[var(--shadow-card)] hover:border-[var(--neutral-300)]',

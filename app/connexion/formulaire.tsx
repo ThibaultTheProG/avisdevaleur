@@ -80,7 +80,7 @@ export function FormulaireConnexion() {
           <button
             type="button"
             onClick={() => setAfficherMdp((v) => !v)}
-            className="text-[13px] font-bold text-[var(--youlive-orange-ink)]"
+            className="cursor-pointer text-[13px] font-bold text-[var(--youlive-orange-ink)]"
           >
             {afficherMdp ? 'Masquer' : 'Afficher'}
           </button>
@@ -110,7 +110,7 @@ export function FormulaireConnexion() {
       <button
         type="submit"
         disabled={enCours}
-        className="mt-[4px] min-h-[48px] w-full rounded-[16px] bg-[var(--youlive-orange)] px-[30px] py-[15px] font-display text-[16px] font-bold text-white shadow-[var(--shadow-primary)] transition active:bg-[var(--youlive-orange-pressed)] active:shadow-none disabled:bg-[var(--neutral-100)] disabled:text-[var(--neutral-500)] disabled:shadow-none"
+        className="mt-[4px] min-h-[48px] w-full cursor-pointer rounded-[16px] bg-[var(--youlive-orange)] px-[30px] py-[15px] font-display text-[16px] font-bold text-white shadow-[var(--shadow-primary)] transition active:bg-[var(--youlive-orange-pressed)] active:shadow-none disabled:bg-[var(--neutral-100)] disabled:text-[var(--neutral-500)] disabled:shadow-none"
       >
         {enCours ? 'Connexion…' : 'Se connecter'}
       </button>
@@ -123,7 +123,7 @@ export function FormulaireConnexion() {
       <button
         type="button"
         onClick={() => setAide((v) => !v)}
-        className="self-start text-[13px] font-bold text-[var(--youlive-orange-ink)]"
+        className="cursor-pointer self-start text-[13px] font-bold text-[var(--youlive-orange-ink)]"
       >
         Mot de passe oublié ?
       </button>

@@ -33,7 +33,8 @@ export function FilEtapesMobile({ etape, terminees, onAller }: Props) {
                 aria-current={courante ? 'step' : undefined}
                 aria-label={`Étape ${numero} — ${ETAPES[index]}`}
                 className={cn(
-                  'grid shrink-0 place-items-center rounded-full font-display font-bold transition',
+                  'grid shrink-0 cursor-pointer place-items-center rounded-full font-display font-bold transition',
+                  'disabled:cursor-default',
                   courante
                     ? 'size-[38px] border-[2.5px] border-[var(--youlive-orange)] bg-white text-[15px] text-[var(--youlive-orange)]'
                     : fini
@@ -83,7 +84,8 @@ export function RailEtapes({ etape, terminees, compteurs, onAller }: Props) {
                 onClick={() => fini && onAller(numero)}
                 aria-current={courante ? 'step' : undefined}
                 className={cn(
-                  'flex w-full items-center gap-[10px] rounded-[14px] px-[12px] py-[11px] text-left text-[14px] font-bold transition',
+                  'flex w-full cursor-pointer items-center gap-[10px] rounded-[14px] px-[12px] py-[11px] text-left text-[14px] font-bold transition',
+                  'disabled:cursor-default',
                   courante
                     ? 'bg-[var(--youlive-orange-soft)] text-[var(--youlive-orange-ink)]'
                     : fini
