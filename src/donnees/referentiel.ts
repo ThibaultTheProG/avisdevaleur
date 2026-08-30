@@ -1,6 +1,7 @@
 import { REFERENTIEL_PAR_DEFAUT } from '../calcul/referentielParDefaut.ts';
 import type { Referentiel } from '../calcul/types.ts';
 import { db } from '../prisma/db.ts';
+import { sourceBareme } from './baremeModification.ts';
 
 export type VersionReferentiel = {
   id: string;
@@ -34,6 +35,43 @@ export async function referentielActif(): Promise<VersionReferentiel> {
     creeLe: version.creeLe,
     creeParIdapimo: version.creeParIdapimo,
   };
+}
+
+/**
+ * Une version précise, par identifiant. Sert à recalculer un avis avec le
+ * barème qui l'a produit (voir `referentielPourModification`).
+ */
+export async function referentielParId(id: string): Promise<VersionReferentiel> {
+  const version = await db.orm.avis_de_valeur.ReferentielVersion
+    .where({ id })
+    .first();
+
+  if (!version) {
+    // Une version rattachée à un avis enregistré n'est jamais supprimée
+    // (`publierReferentiel` la désactive seulement) : l'absence est anormale.
+    throw new Error(`Version de référentiel introuvable : ${id}.`);
+  }
+
+  return {
+    id: version.id,
+    contenu: { ...REFERENTIEL_PAR_DEFAUT, ...(version.contenu as Partial<Referentiel>) },
+    creeLe: version.creeLe,
+    creeParIdapimo: version.creeParIdapimo,
+  };
+}
+
+/**
+ * Version du référentiel à utiliser pour (re)calculer un avis que l'on
+ * **modifie**. Le choix barème d'origine / barème du jour est isolé dans
+ * `baremeModification.ts` — c'est le seul endroit à toucher pour le basculer.
+ */
+export async function referentielPourModification(avis: {
+  statut: string;
+  referentielVersionId: string;
+}): Promise<VersionReferentiel> {
+  return sourceBareme(avis.statut) === 'version-active'
+    ? referentielActif()
+    : referentielParId(avis.referentielVersionId);
 }
 
 /**

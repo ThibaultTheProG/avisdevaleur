@@ -278,6 +278,36 @@ export async function enregistrerAvis(
   return true;
 }
 
+/**
+ * Re-fige `valeurIntrinseque` / `valeurRetenue` d'un avis **déjà enregistré**, à
+ * partir de son état courant en base (une ou plusieurs étapes viennent d'être
+ * modifiées et autosauvegardées). Le référentiel est fourni par l'appelant :
+ * c'est lui qui tranche entre barème d'origine et barème du jour, via
+ * `referentielPourModification` (voir `baremeModification.ts`).
+ *
+ * Sans effet sur un brouillon : celui-ci se fige la première fois par
+ * `enregistrerAvis`.
+ */
+export async function refigerAvis(
+  id: string,
+  conseillerIdapimo: number,
+  referentiel: { id: string; contenu: Referentiel },
+): Promise<boolean> {
+  const avis = await chargerAvis(id, conseillerIdapimo);
+  if (!avis || avis.statut !== 'enregistre') return false;
+
+  const resultat = calculerAvis(avis.draft, referentiel.contenu);
+
+  await db.orm.avis_de_valeur.AvisDeValeur.where({ id }).update({
+    valeurIntrinseque: decimal(resultat.valeurIntrinseque),
+    valeurRetenue: decimal(resultat.valeurRetenue),
+    referentielVersionId: referentiel.id,
+    modifieLe: new Date().toISOString(),
+  });
+
+  return true;
+}
+
 /** Suppression logique : un document remis à un client ne disparaît pas. */
 export async function supprimerAvis(
   id: string,
