@@ -14,6 +14,7 @@ import {
 } from '@/src/administration/parametres';
 import type { LettreDpe, Referentiel } from '@/src/calcul/types';
 import { Button } from '@/src/ui/button';
+import { PastilleDpe } from '@/src/ui/pastille-dpe';
 import { cn } from '@/src/lib/utils';
 
 /** Écran 9 — Administration · Paramètres (SCREENS.md § 9, bloc `1p`). */
@@ -25,16 +26,6 @@ const ONGLETS = [
   { id: 'tendance', libelle: 'Tendance de marché' },
 ] as const;
 type Onglet = (typeof ONGLETS)[number]['id'];
-
-const DPE_FOND: Record<LettreDpe, string> = {
-  A: 'var(--dpe-a)',
-  B: 'var(--dpe-b)',
-  C: 'var(--dpe-c)',
-  D: 'var(--dpe-d)',
-  E: 'var(--dpe-e)',
-  F: 'var(--dpe-f)',
-  G: 'var(--dpe-g)',
-};
 
 type Props = {
   referentiel: Referentiel;
@@ -380,12 +371,7 @@ function DpeLigne({
 }) {
   return (
     <>
-      <span
-        className="grid size-[34px] place-items-center rounded-[11px] font-display text-[15px] font-bold"
-        style={{ background: DPE_FOND[lettre], color: lettre === 'D' ? 'var(--dpe-d-ink)' : '#fff' }}
-      >
-        {lettre}
-      </span>
+      <PastilleDpe lettre={lettre} className="size-[34px] rounded-[11px] text-[15px]" />
       <ChampCompact unite="%" valeur={maison} onValeur={onMaison} />
       <ChampCompact unite="%" valeur={appartement} onValeur={onAppartement} />
     </>

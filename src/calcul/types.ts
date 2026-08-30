@@ -2,6 +2,9 @@
 
 export type TypeBien = 'maison' | 'appartement';
 export type LettreDpe = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
+/** Les sept lettres, dans l'ordre officiel. Déclarées avec le type pour
+ *  qu'aucune liste parallèle ne puisse s'en écarter. */
+export const LETTRES_DPE: readonly LettreDpe[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 export type CranTendance = 'haussier' | 'equilibre' | 'baissier';
 export type Categorie = 'majoration' | 'minoration';
 

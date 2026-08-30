@@ -3,6 +3,7 @@
 import type { Critere } from '@/src/calcul/catalogue';
 import { euros, pourcentage } from '@/src/calcul/formater';
 import type { Categorie, LigneSaisie, Referentiel } from '@/src/calcul/types';
+import { OptionSelectionnable } from '@/src/ui/option-selectionnable';
 import { Switch } from '@/src/ui/switch';
 import { cn } from '@/src/lib/utils';
 import { ChampNombre } from './champ';
@@ -210,20 +211,19 @@ function PastillesOptions({
       {options.map((option) => {
         const choisi = valeur === option.valeur;
         return (
-          <button
+          <OptionSelectionnable
             key={option.valeur}
-            type="button"
-            aria-pressed={choisi}
+            selectionnee={choisi}
             onClick={() => onValeur(option.valeur)}
             className={cn(
-              'min-h-[44px] cursor-pointer rounded-full border-2 px-[16px] text-[13.5px] font-bold transition',
+              'min-h-[44px] rounded-full px-[16px] text-[13.5px] font-bold',
               choisi
-                ? 'border-[var(--youlive-orange)] bg-[var(--youlive-orange-soft)] text-[var(--youlive-orange-ink)]'
+                ? 'bg-[var(--youlive-orange-soft)] text-[var(--youlive-orange-ink)]'
                 : 'border-[var(--neutral-200)] bg-white text-[var(--neutral-700)]',
             )}
           >
             {option.libelle}
-          </button>
+          </OptionSelectionnable>
         );
       })}
     </div>

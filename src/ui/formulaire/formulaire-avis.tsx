@@ -17,6 +17,7 @@ import type {
 } from '@/src/calcul/types';
 import type { AvisComplet, EntetesAvis } from '@/src/donnees/avis';
 import { Badge } from '@/src/ui/badge';
+import { OptionSelectionnable } from '@/src/ui/option-selectionnable';
 import { Button } from '@/src/ui/button';
 import { cn } from '@/src/lib/utils';
 import { BlocPrixReference } from './bloc-prix-reference';
@@ -277,18 +278,17 @@ export function FormulaireAvis({ avis, referentiel, etape, sauvegarder, finalise
                     const choisi = draft.tendanceCran === valeur;
                     const ajuste = choisi && draft.tendancePourcentage !== taux;
                     return (
-                      <button
+                      <OptionSelectionnable
                         key={valeur}
-                        type="button"
-                        role="radio"
-                        aria-checked={choisi}
+                        semantique="radio"
+                        selectionnee={choisi}
                         onClick={() =>
                           majDraft({ tendanceCran: valeur, tendancePourcentage: taux })
                         }
                         className={cn(
-                          'flex cursor-pointer items-center justify-between gap-[12px] rounded-[18px] border-2 bg-white p-[16px] text-left transition',
+                          'flex items-center justify-between gap-[12px] rounded-[18px] bg-white p-[16px] text-left',
                           choisi
-                            ? 'border-[var(--youlive-orange)] bg-[var(--youlive-orange-faint)]'
+                            ? 'bg-[var(--youlive-orange-faint)]'
                             : 'border-[var(--neutral-100)]',
                         )}
                       >
@@ -303,7 +303,7 @@ export function FormulaireAvis({ avis, referentiel, etape, sauvegarder, finalise
                         <span className="font-display text-[15.5px] font-bold text-[var(--youlive-orange-ink)]">
                           {pourcentageSigne(taux)}
                         </span>
-                      </button>
+                      </OptionSelectionnable>
                     );
                   })}
                 </div>

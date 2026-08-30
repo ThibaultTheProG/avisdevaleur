@@ -6,6 +6,7 @@ import Link from 'next/link';
 import type { TypeBien } from '@/src/calcul/types';
 import { metresCarres } from '@/src/calcul/formater';
 import { Button } from '@/src/ui/button';
+import { OptionSelectionnable } from '@/src/ui/option-selectionnable';
 import { cn } from '@/src/lib/utils';
 import { demarrerAvis } from './actions';
 
@@ -45,15 +46,14 @@ export function ChoixTypeBien({
         {cartes.map(({ valeur, libelle, Icone }) => {
           const choisi = type === valeur;
           return (
-            <button
+            <OptionSelectionnable
               key={valeur}
-              type="button"
+              selectionnee={choisi}
               onClick={() => setType(valeur)}
-              aria-pressed={choisi}
               className={cn(
-                'flex-1 cursor-pointer rounded-[22px] border-2 bg-white p-[26px] text-left transition',
+                'flex-1 rounded-[22px] bg-white p-[26px] text-left',
                 choisi
-                  ? 'border-[var(--youlive-orange)] shadow-[var(--shadow-calc)]'
+                  ? 'shadow-[var(--shadow-calc)]'
                   : 'border-[var(--neutral-100)] shadow-[var(--shadow-card)] hover:border-[var(--neutral-300)]',
               )}
             >
@@ -73,7 +73,7 @@ export function ChoixTypeBien({
               <span className="mt-[4px] block text-[13px] leading-[1.4] text-[var(--neutral-600)]">
                 Surface médiane de référence : {metresCarres(medianes[valeur])}
               </span>
-            </button>
+            </OptionSelectionnable>
           );
         })}
       </div>

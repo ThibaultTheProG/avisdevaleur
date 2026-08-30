@@ -2,20 +2,8 @@
 
 import { euros, pourcentageSigne } from '@/src/calcul/formater';
 import type { LettreDpe } from '@/src/calcul/types';
+import { couleursDpe, LETTRES_DPE } from '@/src/ui/pastille-dpe';
 import { cn } from '@/src/lib/utils';
-
-const LETTRES: LettreDpe[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-
-/** Couleurs officielles françaises ; texte blanc sauf D. */
-const FONDS: Record<LettreDpe, string> = {
-  A: 'var(--dpe-a)',
-  B: 'var(--dpe-b)',
-  C: 'var(--dpe-c)',
-  D: 'var(--dpe-d)',
-  E: 'var(--dpe-e)',
-  F: 'var(--dpe-f)',
-  G: 'var(--dpe-g)',
-};
 
 export function SelecteurDpe({
   valeur,
@@ -38,7 +26,7 @@ export function SelecteurDpe({
       <span className="text-[13.5px] font-bold text-black">Diagnostic de performance (DPE)</span>
 
       <div role="radiogroup" aria-label="Lettre DPE" className="flex gap-[6px]">
-        {LETTRES.map((lettre) => {
+        {LETTRES_DPE.map((lettre) => {
           const choisi = valeur === lettre;
           return (
             <button
@@ -47,10 +35,7 @@ export function SelecteurDpe({
               role="radio"
               aria-checked={choisi}
               onClick={() => onValeur(choisi ? null : lettre)}
-              style={{
-                background: FONDS[lettre],
-                color: lettre === 'D' ? 'var(--dpe-d-ink)' : '#fff',
-              }}
+              style={couleursDpe(lettre)}
               className={cn(
                 'h-[50px] flex-1 cursor-pointer rounded-[14px] font-display text-[18px] font-bold transition lg:h-[52px] lg:w-[52px] lg:flex-none',
                 choisi && 'outline-[3px] outline-offset-2 outline-black',

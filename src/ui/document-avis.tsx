@@ -2,9 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { TIRET_ABSENCE } from '@/src/calcul/formater';
-import type { LettreDpe } from '@/src/calcul/types';
 import type { DonneesDocument, LigneCaracteristique } from '@/src/document/document';
 import { BoutonImprimer } from '@/src/ui/bouton-imprimer';
+import { PastilleDpe } from '@/src/ui/pastille-dpe';
 
 /**
  * Écran 8 — Document « Avis de valeur » remis au client (SCREENS.md § 8, bloc `1o`).
@@ -12,37 +12,13 @@ import { BoutonImprimer } from '@/src/ui/bouton-imprimer';
  * applicative et la barre d'actions).
  */
 
-const DPE_FOND: Record<LettreDpe, string> = {
-  A: 'var(--dpe-a)',
-  B: 'var(--dpe-b)',
-  C: 'var(--dpe-c)',
-  D: 'var(--dpe-d)',
-  E: 'var(--dpe-e)',
-  F: 'var(--dpe-f)',
-  G: 'var(--dpe-g)',
-};
-
-function PastilleDpe({ lettre }: { lettre: LettreDpe }) {
-  return (
-    <span
-      className="grid size-[26px] place-items-center rounded-[8px] font-display text-[13px] font-bold"
-      style={{
-        background: DPE_FOND[lettre],
-        color: lettre === 'D' ? 'var(--dpe-d-ink)' : '#fff',
-      }}
-    >
-      {lettre}
-    </span>
-  );
-}
-
 function LigneCarac({ ligne }: { ligne: LigneCaracteristique }) {
   return (
     <div className="flex items-center justify-between gap-[16px] border-t border-[var(--neutral-100)] px-[20px] py-[13px] text-[14px] text-[var(--neutral-700)]">
       <span>{ligne.libelle}</span>
       {ligne.dpe !== undefined ? (
         ligne.dpe ? (
-          <PastilleDpe lettre={ligne.dpe} />
+          <PastilleDpe lettre={ligne.dpe} className="size-[26px] rounded-[8px] text-[13px]" />
         ) : (
           <span className="font-display text-[14px] font-bold text-black">{TIRET_ABSENCE}</span>
         )

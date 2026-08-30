@@ -7,9 +7,9 @@
  */
 
 import { REFERENTIEL_PAR_DEFAUT } from '../calcul/referentielParDefaut.ts';
-import type { BaremeDpe, LettreDpe, Referentiel, TypeBien } from '../calcul/types.ts';
+import { LETTRES_DPE, type BaremeDpe, type Referentiel, type TypeBien } from '../calcul/types.ts';
 
-export const LETTRES_DPE: readonly LettreDpe[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+export { LETTRES_DPE };
 export const TYPES_BIEN: readonly TypeBien[] = ['maison', 'appartement'];
 
 export const LIBELLE_PLAFOND: Record<keyof Referentiel['plafonds'], string> = {
