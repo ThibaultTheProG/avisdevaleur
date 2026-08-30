@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     "Rédigez, retrouvez et remettez à vos clients leurs avis de valeur.",
   // Le lien vers /manifest.webmanifest est ajouté par app/manifest.ts.
   applicationName: "Avis de valeur",
-  // L'icône d'onglet vient de la convention de fichier app/icon.svg ; iOS,
+  // L'icône d'onglet vient de la convention de fichier app/favicon.ico ; iOS,
   // qui ignore le manifeste, prend app/apple-icon.png.
   appleWebApp: {
     capable: true,
