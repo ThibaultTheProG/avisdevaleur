@@ -37,6 +37,34 @@ export async function referentielActif(): Promise<VersionReferentiel> {
   };
 }
 
+export type VersionReferentielDetaillee = VersionReferentiel & {
+  auteurPrenom: string | null;
+  auteurNom: string | null;
+};
+
+/**
+ * La version active, enrichie du nom de l'administrateur qui l'a publiée
+ * (« Dernière modification : … par … » de l'écran 9). `null` pour la version
+ * initiale du seed.
+ */
+export async function referentielActifDetaille(): Promise<VersionReferentielDetaillee> {
+  const version = await referentielActif();
+
+  if (version.creeParIdapimo === null) {
+    return { ...version, auteurPrenom: null, auteurNom: null };
+  }
+
+  const auteur = await db.orm.public.Utilisateur
+    .where({ idapimo: version.creeParIdapimo })
+    .first();
+
+  return {
+    ...version,
+    auteurPrenom: auteur?.prenom?.trim() || null,
+    auteurNom: auteur?.nom?.trim() || null,
+  };
+}
+
 /**
  * Une version précise, par identifiant. Sert à recalculer un avis avec le
  * barème qui l'a produit (voir `referentielPourModification`).
