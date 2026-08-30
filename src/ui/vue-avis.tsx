@@ -193,13 +193,12 @@ export function VueAvis({
             : 'Recalcul avec le barème du jour ; l’avis est rattaché à la version active du référentiel.'}
         </p>
 
-        <Button type="button" variant="secondary" taille="pleine" disabled>
-          <FileText className="size-[18px]" />
-          Voir le document d’avis de valeur
+        <Button asChild variant="secondary" taille="pleine">
+          <Link href={`/avis/${avis.id}/document`}>
+            <FileText className="size-[18px]" />
+            Voir le document d’avis de valeur
+          </Link>
         </Button>
-        <p className="text-center text-[12px] text-[var(--neutral-500)] italic">
-          Document client — bientôt disponible.
-        </p>
 
         <Dialog>
           <DialogTrigger asChild>
