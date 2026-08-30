@@ -173,3 +173,22 @@ input,
 select {
   touch-action: manipulation;
 }
+
+/* Impression — écran 8, le document client. La feuille porte ses propres
+   marges (padding 56/62 px de la maquette) ; la coquille applicative et les
+   notifications ne s'impriment pas. */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  html,
+  body {
+    background: #ffffff;
+  }
+
+  [data-sonner-toaster] {
+    display: none !important;
+  }
+}

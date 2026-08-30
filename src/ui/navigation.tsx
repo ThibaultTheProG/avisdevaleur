@@ -79,7 +79,7 @@ function LienDeconnexion({ className }: { className?: string }) {
 export function MenuLateral({ conseiller }: { conseiller: ConseillerNav }) {
   const chemin = usePathname();
   return (
-    <nav className="hidden w-[232px] shrink-0 flex-col gap-[6px] border-r border-[var(--neutral-100)] bg-white px-[16px] py-[22px] lg:flex">
+    <nav className="hidden w-[232px] shrink-0 flex-col gap-[6px] border-r border-[var(--neutral-100)] bg-white px-[16px] py-[22px] lg:flex print:hidden">
       <Link href="/avis" className="mb-[22px] px-[12px]">
         <Image src="/logo-youlive.svg" alt="Youlive Immobilier" width={112} height={40} priority />
       </Link>
@@ -118,7 +118,7 @@ export function EnteteMobile({ conseiller }: { conseiller: ConseillerNav }) {
   const chemin = usePathname();
 
   return (
-    <div className="lg:hidden">
+    <div className="lg:hidden print:hidden">
       <header className="sticky top-0 z-30 flex items-center justify-between border-b border-[var(--neutral-100)] bg-white px-[18px] py-[12px]">
         <Link href="/avis">
           <Image src="/logo-youlive.svg" alt="Youlive Immobilier" width={98} height={35} priority />

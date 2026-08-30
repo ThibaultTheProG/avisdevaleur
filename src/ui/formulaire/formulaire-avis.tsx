@@ -130,11 +130,11 @@ export function FormulaireAvis({ avis, referentiel, etape, sauvegarder, finalise
           <div className="flex items-start justify-between gap-[16px]">
             <div className="min-w-0">
               <Link
-                href="/avis"
+                href={avis.statut === 'brouillon' ? '/avis' : `/avis/${avis.id}`}
                 className="inline-flex items-center gap-[6px] text-[13.5px] font-bold text-[var(--neutral-700)] transition hover:text-black"
               >
                 <ArrowLeft className="size-[17px]" />
-                Retour
+                {avis.statut === 'brouillon' ? 'Retour' : 'Retour à l’avis de valeur'}
               </Link>
               <h1 className="mt-[8px] font-display text-[22px] leading-[1.15] font-bold text-black lg:text-[26px]">
                 {avis.statut === 'brouillon' ? 'Nouvel avis de valeur' : 'Avis de valeur'}
