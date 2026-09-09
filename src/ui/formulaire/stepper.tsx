@@ -14,10 +14,17 @@ type Props = {
   onAller: (etape: number) => void;
 };
 
-/** Fil d'étapes — COMPONENTS.md § Stepper. Rangée sur mobile, rail sur desktop. */
+/**
+ * Fil d'étapes — COMPONENTS.md § Stepper. Rangée compacte, rail à partir de `xl`.
+ *
+ * Le handoff annonce le rail dès 1024 px (DESIGN_TOKENS.md § Points de rupture)
+ * mais dessine à 1400 px : à 1024, menu 232 + rail 238 + panneau 296 + marges 94
+ * ne laissent que 164 px de contenu, moins qu'un seul bouton. Le rail attend donc
+ * `xl` ; en dessous, cette rangée porte les mêmes informations, titre compris.
+ */
 export function FilEtapesMobile({ etape, terminees, onAller }: Props) {
   return (
-    <div className="lg:hidden">
+    <div className="xl:hidden">
       <ol className="flex items-center">
         {ETAPES.map((_, index) => {
           const numero = index + 1;
@@ -33,7 +40,8 @@ export function FilEtapesMobile({ etape, terminees, onAller }: Props) {
                 aria-current={courante ? 'step' : undefined}
                 aria-label={`Étape ${numero} — ${ETAPES[index]}`}
                 className={cn(
-                  'grid shrink-0 place-items-center rounded-full font-display font-bold transition',
+                  'grid shrink-0 cursor-pointer place-items-center rounded-full font-display font-bold transition',
+                  'disabled:cursor-default',
                   courante
                     ? 'size-[38px] border-[2.5px] border-[var(--youlive-orange)] bg-white text-[15px] text-[var(--youlive-orange)]'
                     : fini
@@ -68,7 +76,7 @@ export function FilEtapesMobile({ etape, terminees, onAller }: Props) {
 
 export function RailEtapes({ etape, terminees, compteurs, onAller }: Props) {
   return (
-    <nav className="hidden w-[238px] shrink-0 lg:block">
+    <nav className="hidden w-[238px] shrink-0 xl:block">
       <ol className="flex flex-col gap-[4px]">
         {ETAPES.map((titre, index) => {
           const numero = index + 1;
@@ -83,7 +91,8 @@ export function RailEtapes({ etape, terminees, compteurs, onAller }: Props) {
                 onClick={() => fini && onAller(numero)}
                 aria-current={courante ? 'step' : undefined}
                 className={cn(
-                  'flex w-full items-center gap-[10px] rounded-[14px] px-[12px] py-[11px] text-left text-[14px] font-bold transition',
+                  'flex w-full cursor-pointer items-center gap-[10px] rounded-[14px] px-[12px] py-[11px] text-left text-[14px] font-bold transition',
+                  'disabled:cursor-default',
                   courante
                     ? 'bg-[var(--youlive-orange-soft)] text-[var(--youlive-orange-ink)]'
                     : fini

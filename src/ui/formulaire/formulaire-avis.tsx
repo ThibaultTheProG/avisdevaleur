@@ -17,6 +17,7 @@ import type {
 } from '@/src/calcul/types';
 import type { AvisComplet, EntetesAvis } from '@/src/donnees/avis';
 import { Badge } from '@/src/ui/badge';
+import { OptionSelectionnable } from '@/src/ui/option-selectionnable';
 import { Button } from '@/src/ui/button';
 import { cn } from '@/src/lib/utils';
 import { BlocPrixReference } from './bloc-prix-reference';
@@ -130,11 +131,11 @@ export function FormulaireAvis({ avis, referentiel, etape, sauvegarder, finalise
           <div className="flex items-start justify-between gap-[16px]">
             <div className="min-w-0">
               <Link
-                href="/avis"
+                href={avis.statut === 'brouillon' ? '/avis' : `/avis/${avis.id}`}
                 className="inline-flex items-center gap-[6px] text-[13.5px] font-bold text-[var(--neutral-700)] transition hover:text-black"
               >
                 <ArrowLeft className="size-[17px]" />
-                Retour
+                {avis.statut === 'brouillon' ? 'Retour' : 'Retour à l’avis de valeur'}
               </Link>
               <h1 className="mt-[8px] font-display text-[22px] leading-[1.15] font-bold text-black lg:text-[26px]">
                 {avis.statut === 'brouillon' ? 'Nouvel avis de valeur' : 'Avis de valeur'}
@@ -164,7 +165,7 @@ export function FormulaireAvis({ avis, referentiel, etape, sauvegarder, finalise
           <RailEtapes etape={etape} terminees={terminees} compteurs={compteurs} onAller={allerA} />
 
           <main className="flex min-w-0 flex-1 flex-col gap-[14px]">
-            <div className="hidden lg:block">
+            <div className="hidden xl:block">
               <p className="text-[11.5px] font-bold tracking-[1.2px] text-[var(--neutral-600)] uppercase">
                 Étape {etape} sur {ETAPES.length}
               </p>
@@ -277,18 +278,17 @@ export function FormulaireAvis({ avis, referentiel, etape, sauvegarder, finalise
                     const choisi = draft.tendanceCran === valeur;
                     const ajuste = choisi && draft.tendancePourcentage !== taux;
                     return (
-                      <button
+                      <OptionSelectionnable
                         key={valeur}
-                        type="button"
-                        role="radio"
-                        aria-checked={choisi}
+                        semantique="radio"
+                        selectionnee={choisi}
                         onClick={() =>
                           majDraft({ tendanceCran: valeur, tendancePourcentage: taux })
                         }
                         className={cn(
-                          'flex items-center justify-between gap-[12px] rounded-[18px] border-2 bg-white p-[16px] text-left transition',
+                          'flex items-center justify-between gap-[12px] rounded-[18px] bg-white p-[16px] text-left',
                           choisi
-                            ? 'border-[var(--youlive-orange)] bg-[var(--youlive-orange-faint)]'
+                            ? 'bg-[var(--youlive-orange-faint)]'
                             : 'border-[var(--neutral-100)]',
                         )}
                       >
@@ -303,7 +303,7 @@ export function FormulaireAvis({ avis, referentiel, etape, sauvegarder, finalise
                         <span className="font-display text-[15.5px] font-bold text-[var(--youlive-orange-ink)]">
                           {pourcentageSigne(taux)}
                         </span>
-                      </button>
+                      </OptionSelectionnable>
                     );
                   })}
                 </div>
@@ -322,26 +322,33 @@ export function FormulaireAvis({ avis, referentiel, etape, sauvegarder, finalise
             )}
 
             {/* Pied de contenu — desktop */}
-            <div className="mt-[10px] hidden items-center justify-between gap-[12px] lg:flex">
+            <div className="mt-[10px] hidden flex-wrap items-center justify-between gap-[12px] lg:flex">
               <Button
                 type="button"
                 variant="secondary"
                 onClick={() => allerA(etape - 1)}
                 disabled={etape === 1 || enCours}
+                className="px-[18px]"
               >
                 Précédent
               </Button>
-              <div className="flex items-center gap-[10px]">
+              <div className="flex flex-1 flex-wrap items-center justify-end gap-[10px]">
                 <Button
                   type="button"
                   variant="secondary"
                   onClick={() => allerA(etape)}
                   disabled={enCours}
+                  className="px-[18px]"
                 >
                   Enregistrer le brouillon
                 </Button>
                 {etape < ETAPES.length && (
-                  <Button type="button" onClick={() => allerA(etape + 1)} disabled={enCours}>
+                  <Button
+                    type="button"
+                    onClick={() => allerA(etape + 1)}
+                    disabled={enCours}
+                    className="px-[18px]"
+                  >
                     Suivant · {ETAPES[etape]}
                   </Button>
                 )}

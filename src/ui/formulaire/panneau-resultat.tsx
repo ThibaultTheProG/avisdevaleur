@@ -162,7 +162,7 @@ export function PanneauResultat(props: Props) {
               type="button"
               onClick={() => setDeplie((v) => !v)}
               aria-expanded={deplie}
-              className="flex shrink-0 items-center gap-[6px] text-[13px] font-bold text-[var(--youlive-orange-ink)]"
+              className="flex shrink-0 cursor-pointer items-center gap-[6px] text-[13px] font-bold text-[var(--youlive-orange-ink)]"
             >
               Détail
               <span className="grid size-[26px] place-items-center rounded-full bg-[var(--youlive-orange-soft)]">

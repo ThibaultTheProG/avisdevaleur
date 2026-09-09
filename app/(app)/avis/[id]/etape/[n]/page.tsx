@@ -1,7 +1,7 @@
 import { notFound, redirect } from 'next/navigation';
 import { exigerConseiller } from '@/src/auth/session';
 import { chargerAvis } from '@/src/donnees/avis';
-import { referentielActif } from '@/src/donnees/referentiel';
+import { referentielPourModification } from '@/src/donnees/referentiel';
 import { FormulaireAvis } from '@/src/ui/formulaire/formulaire-avis';
 import { NB_ETAPES } from '@/src/ui/formulaire/etapes';
 import { finaliserAvis, sauvegarderEtape } from '../../actions';
@@ -25,7 +25,9 @@ export default async function PageEtape({
   const avis = await chargerAvis(id, conseiller.idapimo);
   if (!avis) notFound();
 
-  const referentiel = await referentielActif();
+  // Modifier un avis enregistré recalcule avec le barème qui l'a produit ;
+  // un brouillon suit le barème du jour (voir `baremeModification.ts`).
+  const referentiel = await referentielPourModification(avis);
 
   return (
     <FormulaireAvis

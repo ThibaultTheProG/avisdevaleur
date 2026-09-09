@@ -10,7 +10,8 @@
     "lint": "eslint",
     "prebuild": "prisma-cli contract emit",
     "contract:emit": "prisma-cli contract emit",
-    "test": "node --test \"src/**/*.test.ts\""
+    "test": "node --test \"src/**/*.test.ts\"",
+    "test:excel": "node scripts/comparaison-excel/comparer.ts 2000 --neutre"
   },
   "dependencies": {
     "@prisma/orm-postgres": "8.0.0-rc.6",

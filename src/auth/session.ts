@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { cookies } from 'next/headers';
 import { db } from '../prisma/db.ts';
+import { peutAdministrer, roleEstAdministrateur } from './autorisations.ts';
 
 /**
  * Sessions applicatives.
@@ -122,7 +123,7 @@ export async function conseillerConnecte(): Promise<Conseiller | null> {
     telephone: utilisateur.telephone?.trim() || null,
     mobile: utilisateur.mobile?.trim() || null,
     siren: utilisateur.siren?.trim() || null,
-    estAdministrateur: utilisateur.role?.trim().toLowerCase() === 'admin',
+    estAdministrateur: roleEstAdministrateur(utilisateur.role),
   };
 }
 
@@ -139,6 +140,6 @@ export async function exigerConseiller(): Promise<Conseiller> {
  */
 export async function exigerAdministrateur(): Promise<Conseiller> {
   const conseiller = await exigerConseiller();
-  if (!conseiller.estAdministrateur) throw new Error('ACCES_REFUSE');
+  if (!peutAdministrer(conseiller)) throw new Error('ACCES_REFUSE');
   return conseiller;
 }
