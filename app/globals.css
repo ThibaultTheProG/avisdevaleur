@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+/* Écran 8 : la mise en page A4 de la maquette, dès que l'écran peut la
+   contenir — et toujours à l'impression, quelle que soit la largeur de
+   l'appareil qui imprime. En deçà, la feuille se replie sur une colonne.
+   Forme en bloc obligatoire : la forme courte `(@media (…), print)` fait de
+   `print` un sélecteur descendant, et la variante ne vaut plus à l'impression. */
+@custom-variant feuille {
+  @media (width >= 48rem) {
+    @slot;
+  }
+  @media print {
+    @slot;
+  }
+}
+
 /* Jetons de design — repris de design_handoff_avis_de_valeur/tokens.css.
    Les polices viennent de next/font (voir app/layout.tsx) : --font-texte (Nunito)
    et --font-display (Quicksand, en attendant les fichiers All Round Gothic).
