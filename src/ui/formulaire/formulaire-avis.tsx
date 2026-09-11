@@ -459,7 +459,7 @@ function Recapitulatif({
         ))}
       </dl>
       <div className="mt-[12px] rounded-[18px] bg-[var(--youlive-orange-faint)] p-[16px]">
-        <p className="text-[12.5px] text-[var(--neutral-700)]">Valeur retenue</p>
+        <p className="text-[12.5px] text-[var(--neutral-700)]">Valeur intrinsèque retenue</p>
         <p className="mt-[2px] font-display text-[30px] leading-[1.1] font-bold text-[var(--youlive-orange)]">
           {euros(resultat.valeurRetenue)}
         </p>

@@ -127,11 +127,11 @@ export function VueAvis({
         </div>
       </header>
 
-      {/* ─── Valeur retenue ─── */}
+      {/* ─── Valeur intrinsèque retenue ─── */}
       <section className="mt-[20px] flex flex-wrap items-end justify-between gap-[16px] rounded-[22px] border-2 border-[var(--youlive-orange-soft)] bg-[var(--youlive-orange-faint)] p-[20px]">
         <div>
           <p className="text-[12px] font-bold tracking-[1.1px] text-[var(--neutral-600)] uppercase">
-            Valeur retenue
+            Valeur intrinsèque retenue
           </p>
           <p className="mt-[4px] font-display text-[32px] leading-[1.05] font-bold text-[var(--youlive-orange)]">
             {euros(avis.valeurRetenue)}

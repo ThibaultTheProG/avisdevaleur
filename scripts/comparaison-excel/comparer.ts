@@ -305,7 +305,7 @@ for (const [grandeur, liste] of lignesRapport) {
     `        écart max #${pire.scenario.id} : ${(pire.app - pire.xl).toFixed(2)} €`,
   );
 }
-// Écart relatif sur la valeur retenue, la seule grandeur que le conseiller lit.
+// Écart relatif sur la valeur intrinsèque retenue, la seule grandeur que le conseiller lit.
 const relatifs = ecarts
   .filter((e) => e.grandeur.startsWith('valeurRetenue'))
   .map((e) => Math.abs(e.app - e.xl) / Math.max(1, Math.abs(e.xl)))
@@ -313,7 +313,7 @@ const relatifs = ecarts
 if (relatifs.length) {
   const q = (f: number) => relatifs[Math.min(relatifs.length - 1, Math.floor(f * relatifs.length))];
   console.log(
-    `Écart relatif sur la valeur retenue — médian ${(q(0.5) * 100).toFixed(1)} %` +
+    `Écart relatif sur la valeur intrinsèque retenue — médian ${(q(0.5) * 100).toFixed(1)} %` +
     ` · 90e centile ${(q(0.9) * 100).toFixed(1)} %` +
     ` · maximum ${(relatifs[relatifs.length - 1] * 100).toFixed(1)} %`,
   );

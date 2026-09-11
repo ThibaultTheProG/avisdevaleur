@@ -102,7 +102,7 @@ export function ListeAvis({
         <span>Client</span>
         <span>Adresse du bien</span>
         <span>Date</span>
-        <span className="text-right">Valeur retenue</span>
+        <span className="text-right">Valeur intrinsèque retenue</span>
       </div>
 
       {filtres.length === 0 ? (

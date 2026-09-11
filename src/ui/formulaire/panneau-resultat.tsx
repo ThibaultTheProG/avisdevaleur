@@ -90,7 +90,7 @@ export function PanneauResultat(props: Props) {
           </div>
 
           <div className="rounded-[18px] border-2 border-[var(--youlive-orange-soft)] bg-[var(--youlive-orange-faint)] p-[14px]">
-            <p className="text-[12.5px] text-[var(--neutral-700)]">Valeur retenue</p>
+            <p className="text-[12.5px] text-[var(--neutral-700)]">Valeur intrinsèque retenue</p>
             <p className="mt-[2px] font-display text-[32px] leading-[1.1] font-bold text-[var(--youlive-orange)]">
               {euros(retenue)}
             </p>
@@ -137,7 +137,7 @@ export function PanneauResultat(props: Props) {
               <Ventilation resultat={resultat} tendancePourcentage={tendancePourcentage} />
             </div>
             <div className="mt-[12px] rounded-[18px] bg-[var(--youlive-orange-faint)] p-[14px]">
-              <p className="text-[12.5px] text-[var(--neutral-700)]">Valeur retenue</p>
+              <p className="text-[12.5px] text-[var(--neutral-700)]">Valeur intrinsèque retenue</p>
               <p className="mt-[2px] font-display text-[30px] leading-[1.1] font-bold text-[var(--youlive-orange)]">
                 {euros(retenue)}
               </p>
@@ -153,7 +153,7 @@ export function PanneauResultat(props: Props) {
         >
           <div className="flex items-center justify-between gap-[12px]">
             <div className="min-w-0">
-              <p className="text-[12.5px] text-[var(--neutral-700)]">Valeur retenue</p>
+              <p className="text-[12.5px] text-[var(--neutral-700)]">Valeur intrinsèque retenue</p>
               <p className="font-display text-[26px] leading-[1.1] font-bold text-black">
                 {euros(retenue)}
               </p>

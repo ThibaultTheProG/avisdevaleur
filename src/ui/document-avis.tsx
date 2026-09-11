@@ -126,14 +126,14 @@ export function DocumentAvis({
             ))}
           </div>
 
-          {/* Valeur retenue. */}
+          {/* Valeur intrinsèque retenue. */}
           <div className="mt-[30px] flex items-center justify-between gap-[24px] rounded-[22px] border-2 border-[var(--youlive-orange-soft)] bg-[var(--youlive-orange-faint)] px-[30px] py-[28px]">
             <div className="max-w-[300px] text-[14.5px] leading-[1.5] text-[var(--neutral-700)]">
               {doc.legende}
             </div>
             <div className="text-right">
               <span className="text-[12px] font-bold tracking-[1.4px] text-[var(--youlive-orange-ink)]">
-                Valeur retenue
+                Valeur intrinsèque retenue
               </span>
               <span className="mt-[4px] block font-display text-[46px] leading-[1.1] font-bold text-[var(--youlive-orange)]">
                 {doc.valeurRetenue}

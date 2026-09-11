@@ -61,7 +61,7 @@ describe('donneesDocument — document client (ecran 8)', () => {
     assert.equal(doc.signature, "Fait aux Sables-d'Olonne, le 23/08/2026");
   });
 
-  it('valeur retenue = valeur figee, mise en forme comme calculerAvis + euros', () => {
+  it('valeur intrinsèque retenue = valeur figee, mise en forme comme calculerAvis + euros', () => {
     assert.equal(doc.valeurRetenue, euros(resultat.valeurRetenue));
     assert.equal(doc.valeurRetenue, '361 200 €');
   });

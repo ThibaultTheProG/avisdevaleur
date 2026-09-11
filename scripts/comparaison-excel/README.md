@@ -44,7 +44,7 @@ les classeurs : ce serait défaire des décisions client.
 1. **Base des pourcentages.** Le classeur applique tous les % à `surface × prix/m²`
    et soustrait la décote de grande surface en fin, comme une minoration. Le
    handoff l'intègre à `prixReference`, base de tous les %. Écart médian **3,6 %**
-   sur la valeur retenue, 16,5 % au 90e centile.
+   sur la valeur intrinsèque retenue, 16,5 % au 90e centile.
 2. **Surface médiane appartement** : classeur « Référence 65 m2 », application 60.
 3. **« Nuisance ou risque »** : ajoutée à l'appartement (le classeur maison seul la
    portait).
