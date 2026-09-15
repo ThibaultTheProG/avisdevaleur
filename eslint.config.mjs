@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Worktrees git de Claude Code : `.next/**` ci-dessus ne vaut qu'à la
+    // racine, donc leurs artefacts de build étaient bien lintés.
+    ".claude/worktrees/**",
     // Artefacts générés par Prisma Next — jamais écrits à la main.
     "src/prisma/contract.d.ts",
     "migrations/**",
