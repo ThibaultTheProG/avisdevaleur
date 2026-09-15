@@ -93,6 +93,19 @@ export function rsacAffichable(siren: string | null | undefined): string | null 
   return valeur;
 }
 
+/**
+ * Arrondi au millier d'euros le plus proche — 355 626 € → 356 000 €.
+ *
+ * **Document client uniquement** (demande du client, 15/09/2026) : le chiffre
+ * remis au vendeur est un ordre de grandeur de présentation à la vente, pas une
+ * valeur au centime. Le calcul et les écrans de saisie gardent la valeur exacte,
+ * conformément à l'invariant « l'arrondi n'a lieu qu'à l'affichage ».
+ */
+export function arrondiMillier(valeur: number | null | undefined): number | null {
+  if (valeur === null || valeur === undefined || !Number.isFinite(valeur)) return null;
+  return Math.round(valeur / 1000) * 1000;
+}
+
 export function donneesDocument(entree: EntreeDocument): DonneesDocument {
   const rsac = rsacAffichable(entree.conseiller.siren);
 
@@ -130,7 +143,8 @@ export function donneesDocument(entree: EntreeDocument): DonneesDocument {
       : null,
 
     legende: 'Valeur de présentation à la vente retenue pour ce bien',
-    valeurRetenue: euros(entree.valeurRetenue),
+    // Arrondi au millier : voir `arrondiMillier`.
+    valeurRetenue: euros(arrondiMillier(entree.valeurRetenue)),
 
     conseiller: {
       titre: 'VOTRE CONSEILLER',
