@@ -6,7 +6,7 @@ import type { Categorie, LigneSaisie, Referentiel } from '@/src/calcul/types';
 import { OptionSelectionnable } from '@/src/ui/option-selectionnable';
 import { Switch } from '@/src/ui/switch';
 import { cn } from '@/src/lib/utils';
-import { ChampNombre } from './champ';
+import { ChampNombre, ChampTexte } from './champ';
 
 /**
  * Ligne de critère — COMPONENTS.md § RowCritere.
@@ -189,6 +189,19 @@ export function LigneCritere({
               options={critere.options}
               valeur={ligne.option ?? null}
               onValeur={(option) => modifier({ option })}
+            />
+          )}
+
+          {/* Hors du `switch` sur `kind` : tout critère déclarant `texteLibre`
+              le recevra, sans nouvelle plomberie. */}
+          {critere.texteLibre && (
+            <ChampTexte
+              className="mt-[10px]"
+              libelle={critere.texteLibre.libelle}
+              aide={critere.texteLibre.aide}
+              maxLength={critere.texteLibre.max}
+              value={ligne.texte ?? ''}
+              onChange={(e) => modifier({ texte: e.target.value })}
             />
           )}
         </div>

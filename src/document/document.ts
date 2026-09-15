@@ -36,6 +36,11 @@ export type EntreeDocument = {
   tendanceCran: CranTendance;
   /** Date d'établissement = dernière modification de l'avis. */
   etabliLe: string;
+  /**
+   * Nature des travaux complémentaires, texte libre saisi par le conseiller.
+   * `null` quand la ligne est absente, inactive, ou son texte vide.
+   */
+  travaux: string | null;
   /** Montants figés à l'enregistrement. */
   valeurRetenue: number | null;
   valeurIntrinseque: number | null;
@@ -65,6 +70,8 @@ export type DonneesDocument = {
   demandeur: { nom: string; contact: string[] };
   bien: { titre: string; lignes: string[] };
   caracteristiques: LigneCaracteristique[];
+  /** `null` → aucun bloc travaux n'est imprimé. */
+  travaux: { libelle: string; texte: string } | null;
   legende: string;
   valeurRetenue: string;
   conseiller: { titre: string; nom: string; contact: string[] };
@@ -117,6 +124,10 @@ export function donneesDocument(entree: EntreeDocument): DonneesDocument {
       { libelle: 'Diagnostic de performance énergétique', valeur: null, dpe: entree.dpe },
       { libelle: 'Tendance du marché local', valeur: LIBELLE_TENDANCE[entree.tendanceCran] },
     ],
+
+    travaux: entree.travaux?.trim()
+      ? { libelle: 'Travaux complémentaires', texte: entree.travaux.trim() }
+      : null,
 
     legende: 'Valeur de présentation à la vente retenue pour ce bien',
     valeurRetenue: euros(entree.valeurRetenue),

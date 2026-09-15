@@ -38,6 +38,7 @@ const ENTREE: EntreeDocument = {
   dpe: 'E',
   tendanceCran: 'equilibre',
   etabliLe: '2026-08-23T10:00:00+02:00',
+  travaux: null,
   valeurRetenue: resultat.valeurRetenue,
   valeurIntrinseque: resultat.valeurIntrinseque,
   conseiller: {
@@ -118,6 +119,27 @@ describe('donneesDocument — document client (ecran 8)', () => {
     assert.equal(vide.valeurRetenue, '—');
     assert.equal(vide.demandeur.nom, 'Demandeur non renseigné');
     assert.deepEqual(vide.demandeur.contact, []);
+  });
+});
+
+describe('donneesDocument — nature des travaux complementaires', () => {
+  it('imprime le texte, trime', () => {
+    const doc = donneesDocument({
+      ...ENTREE,
+      travaux: '  Réfection toiture, ravalement de façade  ',
+    });
+    assert.deepEqual(doc.travaux, {
+      libelle: 'Travaux complémentaires',
+      texte: 'Réfection toiture, ravalement de façade',
+    });
+  });
+
+  it('aucun bloc quand le texte est absent', () => {
+    assert.equal(donneesDocument(ENTREE).travaux, null);
+  });
+
+  it('aucun bloc quand le texte ne contient que des espaces', () => {
+    assert.equal(donneesDocument({ ...ENTREE, travaux: '   ' }).travaux, null);
   });
 });
 

@@ -148,6 +148,28 @@ describe('Règles de calcul', () => {
     );
   });
 
+  it('ignore le texte libre : il n’entre dans aucun calcul', () => {
+    const sans = calculerAvis({ ...base, lignes: { travauxComplementaires: actif({ montant: 5_000 }) } }, REF);
+    const avec = calculerAvis(
+      {
+        ...base,
+        lignes: { travauxComplementaires: actif({ montant: 5_000, texte: 'toiture, ravalement' }) },
+      },
+      REF,
+    );
+    assert.equal(avec.valeurRetenue, sans.valeurRetenue);
+    assert.equal(avec.contributions.find((c) => c.cle === 'travauxComplementaires')?.montant, 5_000);
+  });
+
+  it('ne produit aucune contribution pour un texte libre sans montant', () => {
+    const r = calculerAvis(
+      { ...base, lignes: { travauxComplementaires: actif({ texte: 'toiture' }) } },
+      REF,
+    );
+    assert.equal(r.contributions.length, 0);
+    assert.equal(r.totalMinorations, 0);
+  });
+
   it('applique la tendance de marché sur la valeur intrinsèque', () => {
     const r = calculerAvis({ ...base, tendanceCran: 'haussier', tendancePourcentage: 0.05 }, REF);
     assert.equal(r.valeurIntrinseque, 190_000);

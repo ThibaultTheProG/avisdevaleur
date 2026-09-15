@@ -191,6 +191,10 @@ namespace avis_de_valeur {
     montant     Decimal?
     option      String?
 
+    /// Texte libre indicatif (critère `texteLibre` du catalogue), borné côté
+    /// serveur par `enregistrerBrouillon`. N'entre dans aucun calcul.
+    texte       String?
+
     @@unique([avisId, cle])
     @@map("ligne_avis")
   }

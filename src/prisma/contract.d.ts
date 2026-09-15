@@ -33,7 +33,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'8e5df303ee55024e56d64adc8f06324f7b5261084cc50406929fca0e76b59f43'>;
+  StorageHashBase<'15e92789f299943a0b8122ab3c04b8e44a6ddfd3a3f174acb249f1f16a6367f6'>;
 export type ExecutionHash =
   ExecutionHashBase<'627beaa08b0349bbb5a3e3aafbab0e3e8476071646fd4626fef2b6f989842c8a'>;
 export type ProfileHash =
@@ -277,6 +277,7 @@ export type FieldOutputTypes = {
       readonly coutM2: CodecTypes['pg/numeric@1']['output'] | null;
       readonly montant: CodecTypes['pg/numeric@1']['output'] | null;
       readonly option: CodecTypes['pg/text@1']['output'] | null;
+      readonly texte: CodecTypes['pg/text@1']['output'] | null;
     };
     readonly ReferentielVersion: {
       readonly id: CodecTypes['pg/uuid@1']['output'];
@@ -357,6 +358,7 @@ export type FieldInputTypes = {
       readonly coutM2: CodecTypes['pg/numeric@1']['input'] | null;
       readonly montant: CodecTypes['pg/numeric@1']['input'] | null;
       readonly option: CodecTypes['pg/text@1']['input'] | null;
+      readonly texte: CodecTypes['pg/text@1']['input'] | null;
     };
     readonly ReferentielVersion: {
       readonly id: CodecTypes['pg/uuid@1']['input'];
@@ -437,6 +439,7 @@ export type StorageColumnTypes = {
       readonly option: CodecTypes['pg/text@1']['output'] | null;
       readonly pourcentage: CodecTypes['pg/numeric@1']['output'] | null;
       readonly surface: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly texte: CodecTypes['pg/text@1']['output'] | null;
     };
     readonly referentiel_version: {
       readonly actif: CodecTypes['pg/bool@1']['output'];
@@ -517,6 +520,7 @@ export type StorageColumnInputTypes = {
       readonly option: CodecTypes['pg/text@1']['input'] | null;
       readonly pourcentage: CodecTypes['pg/numeric@1']['input'] | null;
       readonly surface: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly texte: CodecTypes['pg/text@1']['input'] | null;
     };
     readonly referentiel_version: {
       readonly actif: CodecTypes['pg/bool@1']['input'];
@@ -810,6 +814,11 @@ type ContractBase = Omit<
                   readonly nullable: true;
                 };
                 readonly option: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly texte: {
                   readonly nativeType: 'text';
                   readonly codecId: 'pg/text@1';
                   readonly nullable: true;
@@ -1384,6 +1393,10 @@ type ContractBase = Omit<
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
+              readonly texte: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
             };
             readonly relations: {
               readonly avis: {
@@ -1413,6 +1426,7 @@ type ContractBase = Omit<
                 readonly coutM2: { readonly column: 'cout_m2' };
                 readonly montant: { readonly column: 'montant' };
                 readonly option: { readonly column: 'option' };
+                readonly texte: { readonly column: 'texte' };
               };
             };
           };

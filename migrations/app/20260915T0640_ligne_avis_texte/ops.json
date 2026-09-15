@@ -1,0 +1,44 @@
+[
+  {
+    "id": "column.avis_de_valeur.ligne_avis.texte",
+    "label": "Add column \"texte\" to \"ligne_avis\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "avis_de_valeur",
+        "objectType": "column",
+        "name": "texte",
+        "table": "ligne_avis"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"texte\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "avis_de_valeur",
+          "ligne_avis",
+          "texte"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"texte\"",
+        "sql": "ALTER TABLE \"avis_de_valeur\".\"ligne_avis\" ADD COLUMN \"texte\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"texte\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "avis_de_valeur",
+          "ligne_avis",
+          "texte"
+        ]
+      }
+    ]
+  }
+]

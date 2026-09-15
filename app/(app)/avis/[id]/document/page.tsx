@@ -31,6 +31,11 @@ export default async function PageDocument({
     tendanceCran: avis.draft.tendanceCran,
     // Établi = dernière modification de l'avis.
     etabliLe: avis.modifieLe,
+    // Une ligne désactivée ne minore pas : annoncer ses travaux au client
+    // serait mensonger.
+    travaux: avis.draft.lignes.travauxComplementaires?.active
+      ? (avis.draft.lignes.travauxComplementaires.texte ?? null)
+      : null,
     valeurRetenue: avis.valeurRetenueFigee,
     valeurIntrinseque: avis.valeurIntrinsequeFigee,
     conseiller: {

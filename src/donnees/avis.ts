@@ -33,6 +33,17 @@ function decimal(valeur: number | null | undefined): string | null {
     : String(valeur);
 }
 
+/**
+ * Texte libre : trimé, borné, `null` si vide — ou si le critère n'en déclare
+ * aucun. La normalisation est ici et pas seulement dans l'UI : les server
+ * actions transmettent le `draft` du client sans schéma de validation.
+ */
+function assainirTexte(valeur: string | null | undefined, max: number | undefined): string | null {
+  if (!max) return null;
+  const propre = valeur?.trim();
+  return propre ? propre.slice(0, max) : null;
+}
+
 export type Statut = 'brouillon' | 'enregistre';
 
 export type AvisComplet = {
@@ -71,6 +82,7 @@ type LigneEnBase = {
   coutM2: unknown;
   montant: unknown;
   option: string | null;
+  texte: string | null;
 };
 
 function draftDepuisLignes(
@@ -94,6 +106,7 @@ function draftDepuisLignes(
       coutM2: nombre(ligne.coutM2),
       montant: nombre(ligne.montant),
       option: ligne.option,
+      texte: ligne.texte,
     };
   }
   return {
@@ -244,6 +257,7 @@ export async function enregistrerBrouillon(
       coutM2: decimal(saisie.coutM2),
       montant: decimal(saisie.montant),
       option: saisie.option ?? null,
+      texte: assainirTexte(saisie.texte, critere.texteLibre?.max),
     });
   }
 
