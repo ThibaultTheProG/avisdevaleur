@@ -1,16 +1,19 @@
 /**
  * Identité de l'agence et mentions légales du document client (écran 8).
  *
- * Toutes ces chaînes sont **reprises mot pour mot de la maquette**
+ * Ces chaînes sont **reprises mot pour mot de la maquette**
  * (`design_handoff_avis_de_valeur/Canvas.dc.html`, bloc `1o`). SCREENS.md § 8 :
  * « texte à reprendre mot pour mot depuis la maquette ». Elles ne viennent
  * d'aucune base — à faire valider par le client avant mise en service, et à
  * déplacer vers l'écran 9 si elles doivent devenir éditables.
+ *
+ * **Exception : `adresse`**, donnée par le client le 15/09/2026 et qui remplace
+ * celle de la maquette. Ne pas la « restaurer » depuis le Canvas.
  */
 
 export const SOCIETE = {
   raisonSociale: 'SAS JMG Youlive Immobilier',
-  adresse: "14 rue de l'Océan, 85100 Les Sables-d'Olonne",
+  adresse: "207 ter rue du Dr Charcot, 85100 Les Sables-d'Olonne",
   contact: 'contact@youlive-immobilier.fr · www.youlive-immobilier.fr',
 
   /** Lieu d'établissement de l'avis (« Établi le … aux Sables-d'Olonne »). */
