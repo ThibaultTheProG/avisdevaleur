@@ -36,6 +36,11 @@ export type EntreeDocument = {
   tendanceCran: CranTendance;
   /** Date d'établissement = dernière modification de l'avis. */
   etabliLe: string;
+  /**
+   * Nature des travaux complémentaires, texte libre saisi par le conseiller.
+   * `null` quand la ligne est absente, inactive, ou son texte vide.
+   */
+  travaux: string | null;
   /** Montants figés à l'enregistrement. */
   valeurRetenue: number | null;
   valeurIntrinseque: number | null;
@@ -65,6 +70,8 @@ export type DonneesDocument = {
   demandeur: { nom: string; contact: string[] };
   bien: { titre: string; lignes: string[] };
   caracteristiques: LigneCaracteristique[];
+  /** `null` → aucun bloc travaux n'est imprimé. */
+  travaux: { libelle: string; texte: string } | null;
   legende: string;
   valeurRetenue: string;
   conseiller: { titre: string; nom: string; contact: string[] };
@@ -84,6 +91,19 @@ export function rsacAffichable(siren: string | null | undefined): string | null 
   const valeur = siren?.trim();
   if (!valeur || valeur === '0' || valeur === '1') return null;
   return valeur;
+}
+
+/**
+ * Arrondi au millier d'euros le plus proche — 355 626 € → 356 000 €.
+ *
+ * **Document client uniquement** (demande du client, 15/09/2026) : le chiffre
+ * remis au vendeur est un ordre de grandeur de présentation à la vente, pas une
+ * valeur au centime. Le calcul et les écrans de saisie gardent la valeur exacte,
+ * conformément à l'invariant « l'arrondi n'a lieu qu'à l'affichage ».
+ */
+export function arrondiMillier(valeur: number | null | undefined): number | null {
+  if (valeur === null || valeur === undefined || !Number.isFinite(valeur)) return null;
+  return Math.round(valeur / 1000) * 1000;
 }
 
 export function donneesDocument(entree: EntreeDocument): DonneesDocument {
@@ -118,8 +138,13 @@ export function donneesDocument(entree: EntreeDocument): DonneesDocument {
       { libelle: 'Tendance du marché local', valeur: LIBELLE_TENDANCE[entree.tendanceCran] },
     ],
 
+    travaux: entree.travaux?.trim()
+      ? { libelle: 'Travaux complémentaires', texte: entree.travaux.trim() }
+      : null,
+
     legende: 'Valeur de présentation à la vente retenue pour ce bien',
-    valeurRetenue: euros(entree.valeurRetenue),
+    // Arrondi au millier : voir `arrondiMillier`.
+    valeurRetenue: euros(arrondiMillier(entree.valeurRetenue)),
 
     conseiller: {
       titre: 'VOTRE CONSEILLER',

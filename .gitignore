@@ -33,6 +33,11 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# worktrees git créés par Claude Code : arbres de travail complets, artefacts de
+# build compris. Jamais à committer, et c'est ce qui faisait échouer `pnpm lint`
+# à la racine. `.claude/skills/` reste suivi, lui.
+/.claude/worktrees/
+
 # vercel
 .vercel
 

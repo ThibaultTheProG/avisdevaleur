@@ -88,3 +88,43 @@ export function ChampNombre({
     />
   );
 }
+
+/**
+ * Champ de texte libre — même gabarit que `Champ` (libellé, aide), un
+ * `textarea` de deux lignes à la place de l'`input`. Pas de redimensionnement :
+ * la hauteur de la carte de critère reste prévisible.
+ */
+export function ChampTexte({
+  libelle,
+  aide,
+  className,
+  textareaClassName,
+  ...props
+}: React.ComponentProps<'textarea'> & {
+  libelle: string;
+  aide?: string;
+  textareaClassName?: string;
+}) {
+  const id = useId();
+  return (
+    <div className={cn('flex flex-col gap-[6px]', className)}>
+      <label htmlFor={id} className="text-[13.5px] font-bold text-black">
+        {libelle}
+      </label>
+      <textarea
+        id={id}
+        rows={2}
+        className={cn(
+          'w-full min-w-0 resize-none rounded-[14px] border-[1.5px] border-[var(--neutral-200)] bg-white px-[14px] py-[13px] text-[15px] leading-[1.45] text-black outline-none transition',
+          'placeholder:text-[var(--neutral-500)]',
+          'focus:border-[var(--youlive-orange)] focus:shadow-[var(--ring-focus)]',
+          textareaClassName,
+        )}
+        {...props}
+      />
+      {aide && (
+        <p className="text-[12.5px] leading-[1.4] text-[var(--neutral-600)] italic">{aide}</p>
+      )}
+    </div>
+  );
+}

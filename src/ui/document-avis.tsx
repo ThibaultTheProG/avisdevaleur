@@ -124,6 +124,16 @@ export function DocumentAvis({
             {doc.caracteristiques.map((ligne) => (
               <LigneCarac key={ligne.libelle} ligne={ligne} />
             ))}
+            {doc.travaux && (
+              <div className="border-t border-[var(--neutral-100)] px-[20px] py-[13px]">
+                <span className="text-[14px] text-[var(--neutral-700)]">
+                  {doc.travaux.libelle}
+                </span>
+                <p className="mt-[4px] font-display text-[14px] leading-[1.5] font-bold text-black">
+                  {doc.travaux.texte}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Valeur intrinsèque retenue. */}
@@ -142,7 +152,9 @@ export function DocumentAvis({
           </div>
 
           {/* Conseiller / signature. */}
-          <div className="mt-[34px] flex gap-[40px]">
+          {/* `break-inside-avoid` : à l'impression, les coordonnées du conseiller
+              et la signature ne doivent jamais être coupées en deux. */}
+          <div className="mt-[34px] flex gap-[40px] print:break-inside-avoid">
             <BlocIdentite
               titre={doc.conseiller.titre}
               nom={doc.conseiller.nom}

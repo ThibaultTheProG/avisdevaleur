@@ -4,9 +4,15 @@ import { calculerAvis } from '../calcul/calculer.ts';
 import { euros } from '../calcul/formater.ts';
 import { REFERENTIEL_PAR_DEFAUT as REF } from '../calcul/referentielParDefaut.ts';
 import type { AvisDraft } from '../calcul/types.ts';
-import { donneesDocument, rsacAffichable, type EntreeDocument } from './document.ts';
+import {
+  arrondiMillier,
+  donneesDocument,
+  rsacAffichable,
+  type EntreeDocument,
+} from './document.ts';
 
 const actif = (v: Record<string, unknown>) => ({ active: true, ...v });
+const TIRET = '\u2014';
 
 // Exemple de référence « maison » de REGLES_DE_CALCUL.md → 361 200 €.
 const DRAFT_MAISON: AvisDraft = {
@@ -38,6 +44,7 @@ const ENTREE: EntreeDocument = {
   dpe: 'E',
   tendanceCran: 'equilibre',
   etabliLe: '2026-08-23T10:00:00+02:00',
+  travaux: null,
   valeurRetenue: resultat.valeurRetenue,
   valeurIntrinseque: resultat.valeurIntrinseque,
   conseiller: {
@@ -61,9 +68,12 @@ describe('donneesDocument — document client (ecran 8)', () => {
     assert.equal(doc.signature, "Fait aux Sables-d'Olonne, le 23/08/2026");
   });
 
-  it('valeur intrinsèque retenue = valeur figee, mise en forme comme calculerAvis + euros', () => {
-    assert.equal(doc.valeurRetenue, euros(resultat.valeurRetenue));
-    assert.equal(doc.valeurRetenue, '361 200 €');
+  it('valeur intrinsèque retenue = valeur figee, arrondie au millier', () => {
+    // L'accord avec calculerAvis tient toujours, à l'arrondi de présentation près.
+    assert.equal(doc.valeurRetenue, euros(arrondiMillier(resultat.valeurRetenue)));
+    // L'exemple de référence vaut 361 200 € ; le document en imprime 361 000 €.
+    assert.equal(resultat.valeurRetenue, 361_200);
+    assert.equal(doc.valeurRetenue, '361 000 €');
   });
 
   it('caracteristiques dans l ordre de la maquette', () => {
@@ -118,6 +128,53 @@ describe('donneesDocument — document client (ecran 8)', () => {
     assert.equal(vide.valeurRetenue, '—');
     assert.equal(vide.demandeur.nom, 'Demandeur non renseigné');
     assert.deepEqual(vide.demandeur.contact, []);
+  });
+});
+
+describe('arrondiMillier — valeur du document client au millier le plus proche', () => {
+  it('arrondit vers le haut a partir de la moitie', () => {
+    assert.equal(arrondiMillier(355_626), 356_000);
+    assert.equal(arrondiMillier(355_500), 356_000);
+  });
+
+  it('arrondit vers le bas en deca', () => {
+    assert.equal(arrondiMillier(355_499), 355_000);
+    assert.equal(arrondiMillier(361_200), 361_000);
+  });
+
+  it('laisse un multiple de mille inchange', () => {
+    assert.equal(arrondiMillier(356_000), 356_000);
+  });
+
+  it('propage l absence de valeur, jamais 0', () => {
+    assert.equal(arrondiMillier(null), null);
+    assert.equal(arrondiMillier(undefined), null);
+    assert.equal(euros(arrondiMillier(null)), TIRET);
+  });
+
+  it('le document imprime le tiret quand la valeur est absente', () => {
+    assert.equal(donneesDocument({ ...ENTREE, valeurRetenue: null }).valeurRetenue, TIRET);
+  });
+});
+
+describe('donneesDocument — nature des travaux complementaires', () => {
+  it('imprime le texte, trime', () => {
+    const doc = donneesDocument({
+      ...ENTREE,
+      travaux: '  Réfection toiture, ravalement de façade  ',
+    });
+    assert.deepEqual(doc.travaux, {
+      libelle: 'Travaux complémentaires',
+      texte: 'Réfection toiture, ravalement de façade',
+    });
+  });
+
+  it('aucun bloc quand le texte est absent', () => {
+    assert.equal(donneesDocument(ENTREE).travaux, null);
+  });
+
+  it('aucun bloc quand le texte ne contient que des espaces', () => {
+    assert.equal(donneesDocument({ ...ENTREE, travaux: '   ' }).travaux, null);
   });
 });
 

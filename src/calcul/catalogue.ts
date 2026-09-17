@@ -42,6 +42,13 @@ export type Critere = {
   plancher?: number;
   /** `options`, ou `surface` dont le taux dépend de l'option choisie. */
   options?: OptionCritere[];
+  /**
+   * Texte libre indicatif, saisi sous le contrôle du critère. Il ne contribue à
+   * aucun calcul : `max` le borne parce que le texte est imprimé sur le document
+   * client, dont la feuille A4 est déjà juste (mesuré le 15/09/2026 : 1255 px
+   * pour 1123 px de page, débordement préexistant).
+   */
+  texteLibre?: { libelle: string; aide?: string; max: number };
 };
 
 const VERANDA: Critere = {
@@ -92,6 +99,11 @@ const TRAVAUX_COMPLEMENTAIRES: Critere = {
   cle: 'travauxComplementaires',
   libelle: 'Travaux complémentaires',
   kind: 'montant',
+  texteLibre: {
+    libelle: 'Nature des travaux',
+    aide: 'toiture, ravalement… séparés par des virgules',
+    max: 200,
+  },
 };
 
 const NUISANCE: Critere = {

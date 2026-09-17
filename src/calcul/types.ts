@@ -52,6 +52,8 @@ export type LigneSaisie = {
   coutM2?: number | null;
   montant?: number | null;
   option?: string | null;
+  /** Texte libre indicatif (critère `texteLibre`). N'entre dans aucun calcul. */
+  texte?: string | null;
 };
 
 export type AvisDraft = {
