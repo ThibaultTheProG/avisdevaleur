@@ -240,7 +240,7 @@ export function FormulaireAvis({ avis, referentiel, etape, sauvegarder, finalise
                   unite="m²"
                   valeur={draft.surfaceMedianeQuartier}
                   onValeur={(surfaceMedianeQuartier) => majDraft({ surfaceMedianeQuartier })}
-                  aide={`Au-delà de cette surface médiane, une décote de ${Math.round(referentiel.tauxDecoteGrandeSurface * 100)} % est appliquée sur les mètres carrés supplémentaires.`}
+                  aide={`À modifier si la surface médiane réelle du quartier est supérieure ou inférieure à la valeur pré-remplie. Au-delà de cette surface médiane, une décote de ${Math.round(referentiel.tauxDecoteGrandeSurface * 100)} % est appliquée sur les mètres carrés supplémentaires.`}
                 />
                 <SelecteurDpe
                   valeur={draft.dpe ?? null}

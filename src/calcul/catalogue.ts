@@ -150,6 +150,7 @@ export const MINORATIONS_MAISON: Critere[] = [
   {
     cle: 'etages',
     libelle: 'Étages',
+    aide: 'sauf si la majorité des biens proches sont des R+2 ou des R+3',
     kind: 'options',
     options: [
       { valeur: 'R+2', libelle: 'R+2 · −5 %', taux: 0.05 },
@@ -187,7 +188,7 @@ export const MINORATIONS_MAISON: Critere[] = [
   },
   {
     cle: 'sansGarage',
-    libelle: 'Pas de garage ni stationnement · −5 %',
+    libelle: 'Pas de garage ni parking · −5 %',
     kind: 'interrupteur',
     taux: 0.05,
   },
