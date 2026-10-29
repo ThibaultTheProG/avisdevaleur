@@ -1,6 +1,7 @@
 'use client';
 
 import { useId } from 'react';
+import { ExternalLink } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 
 /**
@@ -12,6 +13,7 @@ export function Champ({
   libelle,
   unite,
   aide,
+  lien,
   erreur,
   className,
   inputClassName,
@@ -20,15 +22,31 @@ export function Champ({
   libelle: string;
   unite?: string;
   aide?: string;
+  /** Source externe où le conseiller va chercher la valeur, ouverte dans un nouvel onglet. */
+  lien?: { href: string; libelle: string };
   erreur?: string | null;
   inputClassName?: string;
 }) {
   const id = useId();
   return (
     <div className={cn('flex flex-col gap-[6px]', className)}>
-      <label htmlFor={id} className="text-[13.5px] font-bold text-black">
-        {libelle}
-      </label>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-[12px] gap-y-[2px]">
+        <label htmlFor={id} className="text-[13.5px] font-bold text-black">
+          {libelle}
+        </label>
+        {lien && (
+          <a
+            href={lien.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-[4px] text-[12.5px] font-semibold text-[var(--youlive-orange)] underline-offset-2 hover:underline"
+          >
+            {lien.libelle}
+            <ExternalLink aria-hidden className="size-[13px]" />
+            <span className="sr-only">(nouvel onglet)</span>
+          </a>
+        )}
+      </div>
       <div className="relative">
         <input
           id={id}
