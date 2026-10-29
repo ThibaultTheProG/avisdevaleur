@@ -233,6 +233,10 @@ export function FormulaireAvis({ avis, referentiel, etape, sauvegarder, finalise
                   unite="€"
                   valeur={draft.prixM2}
                   onValeur={(prixM2) => majDraft({ prixM2 })}
+                  lien={{
+                    href: 'https://www.meilleursagents.com/prix-immobilier/',
+                    libelle: 'Voir sur Meilleurs Agents',
+                  }}
                   erreur={erreurs.prixM2}
                 />
                 <ChampNombre
